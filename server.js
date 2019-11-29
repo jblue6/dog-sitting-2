@@ -5,18 +5,16 @@ const config = require("config");
 
 const app = express();
 
-app.use(express.json());
-
 const db = config.get("mongoURI");
 
 //connect to Mongo
-mongoose
-  .connect(db, { useNewUrlParser: true, useCreateIndex: true })
-  .then(() => console.log("Mongo DB connected"))
-  .catch(err => console.log(err));
+// mongoose
+//   .connect(db, { useNewUrlParser: true, useCreateIndex: true })
+//   .then(() => console.log("Mongo DB connected"))
+//   .catch(err => console.log(err));
 
-// use routes
-app.use("/api/data", require("./routes/data"));
+//use routes
+app.use("/api/information", require("./routes/information"));
 
 // serve static assets if in production
 if (process.env.NODE_ENV === "production") {
