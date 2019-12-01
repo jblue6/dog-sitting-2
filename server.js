@@ -15,6 +15,7 @@ const db = config.get("mongoURI");
 
 //use routes
 app.use("/api/information", require("./routes/information"));
+app.use("/api/prices", require("./routes/prices"));
 
 // serve static assets if in production
 if (process.env.NODE_ENV === "production") {
