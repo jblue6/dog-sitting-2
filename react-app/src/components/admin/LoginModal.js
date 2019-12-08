@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Modal, Button, Form, Container } from "react-bootstrap";
+import axios from "axios";
+
 import { AuthContext } from "../../context/AuthContext";
 
 class LoginModal extends Component {
@@ -33,21 +35,44 @@ class LoginModal extends Component {
     e.preventDefault();
     let { email, password } = this.state;
 
-    if (!email || !password) {
-      // some reject logic here
-      //return;
-    }
+    let body = JSON.stringify({ email, password });
 
-    // need the login logic here
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
 
-    // update the auth context
-    this.context.setAuth({
-      isAuthenticated: true,
-      email
-    });
+    // login logic here
+    axios
+      .post("/api/auth", body, config)
+      // on success
+      .then(res => {
+        const { token, user } = res.data;
+
+        this.context.setAuth({
+          isAuthenticated: true,
+          errorMsg: "",
+          token,
+          user
+        });
+      })
+      // on failure
+      .catch(err => {
+        const errorMsg = err.response.data.msg;
+
+        this.context.setAuth({
+          isAuthenticated: false,
+          errorMsg,
+          token: "",
+          user: {}
+        });
+      });
   };
 
   render() {
+    const { errorMsg } = this.context.auth;
+
     let contents = this.state.isVisible ? (
       <Modal.Dialog>
         <Modal.Header>
@@ -73,6 +98,8 @@ class LoginModal extends Component {
                 onChange={this.setPassword}
               />
             </Form.Group>
+
+            <div style={{ color: "red" }}>{errorMsg}</div>
 
             <Button
               variant="primary"

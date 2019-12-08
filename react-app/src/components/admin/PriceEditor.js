@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Table, Button, Container } from "react-bootstrap";
+import { Form, Table, Button } from "react-bootstrap";
 
 import { PricesContext } from "../../context/PricesContext";
 

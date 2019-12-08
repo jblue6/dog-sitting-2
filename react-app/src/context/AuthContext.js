@@ -6,7 +6,9 @@ export class AuthProvider extends Component {
   state = {
     auth: {
       isAuthenticated: false,
-      email: ""
+      errorMsg: "",
+      token: "",
+      user: {}
     }
   };
 

@@ -8,14 +8,22 @@ const app = express();
 const db = config.get("mongoURI");
 
 //connect to Mongo
-// mongoose
-//   .connect(db, { useNewUrlParser: true, useCreateIndex: true })
-//   .then(() => console.log("Mongo DB connected"))
-//   .catch(err => console.log(err));
+mongoose
+  .connect(db, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+  })
+  .then(() => console.log("Mongo DB connected"))
+  .catch(err => console.log(err));
+
+app.use(express.json());
 
 //use routes
 app.use("/api/information", require("./routes/information"));
 app.use("/api/prices", require("./routes/prices"));
+// app.use("/api/users", require("./routes/users"));
+app.use("/api/auth", require("./routes/auth"));
 
 // serve static assets if in production
 if (process.env.NODE_ENV === "production") {

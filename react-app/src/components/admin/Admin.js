@@ -15,15 +15,17 @@ class Admin extends Component {
 
     this.context.setAuth({
       isAuthenticated: false,
-      email: ""
+      errorMsg: "",
+      token: "",
+      user: {}
     });
   };
 
   render() {
-    const { isAuthenticated } = this.context.auth;
-
+    const { isAuthenticated, errorMsg } = this.context.auth;
     const content = isAuthenticated ? (
       <div>
+        <div>{errorMsg}</div>
         <Button className="float-right" onClick={this.logout}>
           Logout
         </Button>
