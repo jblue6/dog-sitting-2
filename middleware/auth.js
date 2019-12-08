@@ -1,6 +1,4 @@
-// request to get and post item information go though this middleware
-// this is to check whether the user is authenticated
-
+// use this middleware function to check whether user is authenticated
 const config = require("config");
 const jwt = require("jsonwebtoken");
 
