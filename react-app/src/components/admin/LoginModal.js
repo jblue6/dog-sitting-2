@@ -65,6 +65,7 @@ class LoginModal extends Component {
           isAuthenticated: false,
           errorMsg,
           token: "",
+          tokenConfig: {},
           user: {}
         });
       });
@@ -119,10 +120,10 @@ class LoginModal extends Component {
         </Container>
       </Modal.Dialog>
     ) : (
-      <Button variant="primary" onClick={this.showDialog} className="mt-3">
-        Login
+        <Button variant="primary" onClick={this.showDialog} className="mt-3">
+          Login
       </Button>
-    );
+      );
     return <div>{contents}</div>;
   }
 }

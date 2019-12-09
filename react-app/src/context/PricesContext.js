@@ -20,14 +20,26 @@ export class PricesProvider extends Component {
         }
         this.setState({ prices: response.data });
       })
-      .catch(function(err) {
+      .catch(function (err) {
         console.log("", err);
       });
   }
   setPrices = prices => {
-    // put the logic here to post to the database
-
-    this.setState(prices);
+    axios
+      .post(`/api/prices/`, { prices })
+      .then(response => {
+        if (response.status !== 200) {
+          console.log(
+            `Looks like there was a problem. Status Code: ${response.status}`
+          );
+          return;
+        }
+        console.log(response);
+        this.setState(prices);
+      })
+      .catch(function (err) {
+        console.log("", err);
+      });
   };
 
   render() {

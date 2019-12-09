@@ -20,15 +20,30 @@ export class InformationProvider extends Component {
         }
         this.setState({ information: response.data });
       })
-      .catch(function(err) {
+      .catch(function (err) {
         console.log("", err);
       });
   }
 
-  setInformation = information => {
-    // database update ultimately needs to go here
-
-    this.setState(information);
+  setInformation = (information, tokenConfig) => {
+    // need to somehow get the token config here so it can be passed to the request
+    const { _id } = this.state.information;
+    axios
+      .put(`/api/information/${_id}`, information)
+      .then(response => {
+        if (response.status !== 200) {
+          console.log(
+            `Looks like there was a problem. Status Code: ${response.status}`
+          );
+          return;
+        }
+        const { title, about } = information;
+        const newInformation = { _id, title, about }
+        this.setState({ information: newInformation });
+      })
+      .catch(function (err) {
+        console.log("", err);
+      });
   };
 
   render() {

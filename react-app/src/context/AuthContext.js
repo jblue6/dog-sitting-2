@@ -8,11 +8,26 @@ export class AuthProvider extends Component {
       isAuthenticated: false,
       errorMsg: "",
       token: "",
+      tokenConfig: {},
       user: {}
     }
   };
 
   setAuth = auth => {
+    const token = auth.token;
+
+    const tokenConfig = {
+      headers: {
+        "Content-type": "application/json"
+      }
+    };
+
+    if (token) {
+      tokenConfig.headers["x-auth-token"] = token;
+    }
+
+    auth.tokenConfig = tokenConfig;
+
     this.setState({ auth });
   };
 

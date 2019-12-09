@@ -11,10 +11,10 @@ class PriceEditor extends Component {
   };
 
   deleteRow = e => {
-    const rowID = parseInt(e.target.parentElement.parentElement.id);
+    const rowID = e.target.parentElement.parentElement.id;
     const { prices } = this.state;
-    prices.splice(rowID, 1);
-    this.setState({ prices });
+    const newPrices = prices.filter(price => price._id !== rowID);
+    this.setState({ prices: newPrices });
   };
 
   addRow = () => {
@@ -22,6 +22,19 @@ class PriceEditor extends Component {
     const newPrice = { description: "", rate: 0, basis: "" };
     this.setState({ prices: [...prices, newPrice] });
   };
+
+  updateRow = e => {
+    const rowID = e.target.parentElement.parentElement.id;
+    let { value, name } = e.target
+    if (name === "rate") value = parseFloat(value);
+
+    const { prices } = this.state;
+    prices.forEach(price => {
+      if (price._id === rowID) price[name] = value;
+    })
+
+    this.setState({ prices });
+  }
 
   handleSubmit = e => {
     e.preventDefault();
@@ -56,18 +69,19 @@ class PriceEditor extends Component {
           </thead>
           <tbody>
             {prices.map((price, index) => (
-              <tr key={index} id={index}>
+              <tr key={price._id} id={price._id} onChange={this.updateRow}>
                 <td>
                   <input
                     style={inputStyle}
+                    name="description"
                     defaultValue={price.description}
                   ></input>
                 </td>
                 <td>
-                  <input style={inputStyle} defaultValue={price.rate}></input>
+                  <input style={inputStyle} name="rate" defaultValue={price.rate}></input>
                 </td>
                 <td>
-                  <input style={inputStyle} defaultValue={price.basis}></input>
+                  <input style={inputStyle} name="basis" defaultValue={price.basis}></input>
                 </td>
                 <td>
                   <Button variant="primary" onClick={this.deleteRow}>

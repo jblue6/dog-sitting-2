@@ -17,7 +17,7 @@ function Prices() {
         </thead>
         <tbody>
           {prices.map(price => (
-            <tr key={price.id}>
+            <tr key={price._id}>
               <td>{price.description}</td>
               <td>£ {price.rate}.00</td>
               <td>{price.basis}</td>

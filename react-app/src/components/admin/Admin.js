@@ -17,6 +17,7 @@ class Admin extends Component {
       isAuthenticated: false,
       errorMsg: "",
       token: "",
+      tokenConfig: {},
       user: {}
     });
   };
@@ -34,8 +35,8 @@ class Admin extends Component {
         <PriceEditor />
       </div>
     ) : (
-      <LoginModal />
-    );
+        <LoginModal />
+      );
 
     return <Container>{content}</Container>;
   }

@@ -12,7 +12,8 @@ class InformationEditor extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { title, about } = this.state;
-    this.context.setInformation({ title, about });
+    const tokenConfig = {};
+    this.context.setInformation({ title, about }, tokenConfig);
   };
 
   setTitle = e => {
@@ -49,7 +50,7 @@ class InformationEditor extends Component {
           <Form.Group>
             <Form.Label>About</Form.Label>
             <Form.Control
-              type="text"
+              as="textarea"
               placeholder={about}
               defaultValue={about}
               onChange={this.setAbout}

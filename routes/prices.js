@@ -1,29 +1,42 @@
 const express = require("express");
 const router = express.Router();
 
-const prices = [
-  {
-    id: 1,
-    description: "Walking",
-    basis: "Per Hour",
-    rate: 10
-  },
-  {
-    id: 2,
-    description: "Day Sitting",
-    basis: "Per Day",
-    rate: 15
-  },
-  {
-    id: 3,
-    description: "Overnight",
-    basis: "Per Night",
-    rate: 25
-  }
-];
+const auth = require("../middleware/auth");
+const Prices = require("../models/Prices");
 
 router.get("/", (req, res) => {
-  res.json(prices);
+  Prices
+    .find()
+    .then(data => res.json(data))
+    .catch(err => res.status(404).json({ success: false }));
+});
+
+router.post("/", (req, res) => {
+  const { prices } = req.body;
+
+  prices.forEach(price => {
+    const exists = price._id;
+    const { description, basis, rate } = price;
+    if (exists) {
+      Prices
+        .updateOne({ _id: price._id }, { description, basis, rate }, { upsert: true })
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
+    } else {
+      const newPrices = new Prices({ description, basis, rate });
+      newPrices
+        .save()
+    }
+  });
+
+  let existingPrices;
+  Prices
+    .find()
+    .then(data => {
+      existingPrices = data;
+      res.json(existingPrices);
+    });
+
 });
 
 module.exports = router;
