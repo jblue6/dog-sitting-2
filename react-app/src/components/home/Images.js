@@ -7,7 +7,7 @@ class Images extends Component {
     index: 0,
     direction: null,
     images: []
-  }
+  };
 
   handleSelect = (index, e) => {
     const { direction } = e;
@@ -15,32 +15,34 @@ class Images extends Component {
   };
 
   componentDidMount = () => {
-    axios
-      .get("https://dog.ceo/api/breeds/image/random/5")
-      .then(response => {
-        const images = response.data.message;
-        this.setState({ images })
-      })
-  }
+    axios.get("https://dog.ceo/api/breeds/image/random/5").then(response => {
+      const images = response.data.message;
+      this.setState({ images });
+    });
+  };
 
   render() {
     const { index, direction, images } = this.state;
     return (
-      <div style={{
-        display: "flex",
-        justifyContent: "center"
-      }}>
-        <Carousel activeIndex={index} direction={direction} onSelect={this.handleSelect} >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center"
+        }}
+      >
+        <Carousel
+          activeIndex={index}
+          direction={direction}
+          onSelect={this.handleSelect}
+        >
           {images.map((image, index) => (
             <Carousel.Item key={index} className="w-100 p-3">
-              <Image
-                src={image}
-                alt="Error"
-              />
+              <Image src={image} alt="Error" height="350" />
             </Carousel.Item>
           ))}
         </Carousel>
-      </div>)
+      </div>
+    );
   }
 }
 

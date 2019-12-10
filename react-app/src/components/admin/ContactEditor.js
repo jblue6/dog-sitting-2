@@ -26,7 +26,6 @@ class ContactEditor extends Component {
     this.setState({ phone });
   };
 
-  // this isn't working for some reason.. component not remounting on context change
   componentDidMount = () => {
     const { email, phone } = this.context.contact;
     this.setState({ email, phone });
@@ -60,7 +59,7 @@ class ContactEditor extends Component {
 
           <Button variant="primary" type="submit" className="float-right ml-2">
             Update
-        </Button>
+          </Button>
         </Form>
       </div>
     );

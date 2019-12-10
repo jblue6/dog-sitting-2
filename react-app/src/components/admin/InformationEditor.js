@@ -26,15 +26,12 @@ class InformationEditor extends Component {
     this.setState({ about });
   };
 
-  // this isn't working for some reason.. component not remounting on context change
-  setInitialState = () => {
+  componentDidMount = () => {
     const { title, about } = this.context.information;
-    if (title) return;
     this.setState({ title, about });
   };
 
   render() {
-    //this.setInitialState();
     const { title, about } = this.context.information;
 
     return (
@@ -63,7 +60,7 @@ class InformationEditor extends Component {
 
           <Button variant="primary" type="submit" className="float-right ml-2">
             Update
-        </Button>
+          </Button>
         </Form>
       </div>
     );

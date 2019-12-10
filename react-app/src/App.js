@@ -10,6 +10,7 @@ import Prices from "./components/prices/Prices";
 import { InformationProvider } from "./context/InformationContext";
 import { PricesProvider } from "./context/PricesContext";
 import { AuthProvider } from "./context/AuthContext";
+import { ContactProvider } from "./context/ContactContext";
 
 function App() {
   return (
@@ -19,7 +20,13 @@ function App() {
         <Switch>
           <Route path="/admin">
             <AuthProvider>
-              <Admin />
+              <InformationProvider>
+                <PricesProvider>
+                  <ContactProvider>
+                    <Admin />
+                  </ContactProvider>
+                </PricesProvider>
+              </InformationProvider>
             </AuthProvider>
           </Route>
 
@@ -35,7 +42,6 @@ function App() {
             </InformationProvider>
           </Route>
         </Switch>
-
       </Router>
     </div>
   );

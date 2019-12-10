@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import Parser from 'html-react-parser';
+import Parser from "html-react-parser";
 import { Container } from "react-bootstrap";
 
 import { InformationContext } from "../../context/InformationContext";
@@ -16,7 +16,9 @@ function Home() {
     <div>
       <Container>
         <h2 className="mt-3">{title}</h2>
-        <div className="mt-3 mb-5">{Parser(about ? about.replace(/\n/g, "<br>") : "")}</div>
+        <div className="mt-3 mb-2">
+          {Parser(about ? about.replace(/\n/g, "<br>") : "")}
+        </div>
         <Images />
       </Container>
       <ContactProvider>

@@ -25,16 +25,16 @@ class PriceEditor extends Component {
 
   updateRow = e => {
     const rowID = parseInt(e.target.parentElement.parentElement.id);
-    let { value, name } = e.target
+    let { value, name } = e.target;
     if (name === "rate") value = parseFloat(value);
 
     const { prices } = this.state;
     prices.forEach((price, index) => {
       if (index === rowID) price[name] = value;
-    })
+    });
 
     this.setState({ prices });
-  }
+  };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -79,10 +79,18 @@ class PriceEditor extends Component {
                   ></input>
                 </td>
                 <td>
-                  <input style={inputStyle} name="rate" defaultValue={price.rate}></input>
+                  <input
+                    style={inputStyle}
+                    name="rate"
+                    defaultValue={price.rate}
+                  ></input>
                 </td>
                 <td>
-                  <input style={inputStyle} name="basis" defaultValue={price.basis}></input>
+                  <input
+                    style={inputStyle}
+                    name="basis"
+                    defaultValue={price.basis}
+                  ></input>
                 </td>
                 <td>
                   <Button variant="primary" onClick={this.deleteRow}>

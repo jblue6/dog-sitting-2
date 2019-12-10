@@ -54,7 +54,7 @@ export class AuthProvider extends Component {
         const errorMsg = err.response.data.msg;
         this.logout(errorMsg);
       });
-  }
+  };
 
   logout = (errorMsg = "") => {
     this.setState({
@@ -66,7 +66,7 @@ export class AuthProvider extends Component {
         user: {}
       }
     });
-  }
+  };
 
   render() {
     const { auth } = this.state;
