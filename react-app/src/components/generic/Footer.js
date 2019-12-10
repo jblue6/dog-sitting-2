@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navbar, Container } from "react-bootstrap";
+import { ContactContext } from "../../context/ContactContext";
 
 function Footer() {
+  const { contact } = useContext(ContactContext);
+
   return (
-    <div style={{ position: "absolute", bottom: 0, width: "100%" }}>
+    <div style={{ position: "absolute", width: "100%" }} className="fixed-bottom">
       <Navbar bg="light" variant="light">
         <Container>
-          Footer
+          <div>Phone: <a href={"tel:" + contact.phone}>{contact.phone}</a></div>
+          <div>Email: <a href={"mailto:" + contact.email}>{contact.email}</a></div>
         </Container>
       </Navbar>
     </div>

@@ -12,7 +12,7 @@ class InformationEditor extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { title, about } = this.state;
-    const tokenConfig = {};
+    const { tokenConfig } = this.props;
     this.context.setInformation({ title, about }, tokenConfig);
   };
 
@@ -26,13 +26,16 @@ class InformationEditor extends Component {
     this.setState({ about });
   };
 
-  componentDidMount = () => {
+  // this isn't working for some reason.. component not remounting on context change
+  setInitialState = () => {
     const { title, about } = this.context.information;
+    if (title) return;
     this.setState({ title, about });
   };
 
   render() {
-    const { title, about } = this.state;
+    //this.setInitialState();
+    const { title, about } = this.context.information;
 
     return (
       <div className="mt-5">
@@ -53,13 +56,14 @@ class InformationEditor extends Component {
               as="textarea"
               placeholder={about}
               defaultValue={about}
+              rows="8"
               onChange={this.setAbout}
             />
           </Form.Group>
 
           <Button variant="primary" type="submit" className="float-right ml-2">
             Update
-          </Button>
+        </Button>
         </Form>
       </div>
     );

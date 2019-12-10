@@ -1,8 +1,11 @@
 import React, { createContext, Component } from "react";
 import axios from "axios";
 
+// create context
 export const InformationContext = createContext();
+InformationContext.displayName = "InformationContext";
 
+// create the provider
 export class InformationProvider extends Component {
   state = {
     information: {}
@@ -13,11 +16,9 @@ export class InformationProvider extends Component {
       .get("/api/information")
       .then(response => {
         if (response.status !== 200) {
-          console.log(
-            `Looks like there was a problem. Status Code: ${response.status}`
-          );
           return;
         }
+
         this.setState({ information: response.data });
       })
       .catch(function (err) {
@@ -26,17 +27,14 @@ export class InformationProvider extends Component {
   }
 
   setInformation = (information, tokenConfig) => {
-    // need to somehow get the token config here so it can be passed to the request
     const { _id } = this.state.information;
     axios
-      .put(`/api/information/${_id}`, information)
+      .put(`/api/information/${_id}`, information, tokenConfig)
       .then(response => {
         if (response.status !== 200) {
-          console.log(
-            `Looks like there was a problem. Status Code: ${response.status}`
-          );
           return;
         }
+
         const { title, about } = information;
         const newInformation = { _id, title, about }
         this.setState({ information: newInformation });
@@ -48,15 +46,11 @@ export class InformationProvider extends Component {
 
   render() {
     const { information } = this.state;
+    const { setInformation } = this;
     return (
-      <InformationContext.Provider
-        value={{
-          information,
-          setInformation: this.setInformation
-        }}
-      >
+      <InformationContext.Provider value={{ information, setInformation }}>
         {this.props.children}
-      </InformationContext.Provider>
+      </InformationContext.Provider >
     );
   }
 }

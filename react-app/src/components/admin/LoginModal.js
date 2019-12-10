@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Modal, Button, Form, Container } from "react-bootstrap";
-import axios from "axios";
 
 import { AuthContext } from "../../context/AuthContext";
 
@@ -33,42 +32,9 @@ class LoginModal extends Component {
 
   attemptLogin = e => {
     e.preventDefault();
-    let { email, password } = this.state;
-
-    let body = JSON.stringify({ email, password });
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    };
-
-    // login logic here
-    axios
-      .post("/api/auth", body, config)
-      // on success
-      .then(res => {
-        const { token, user } = res.data;
-
-        this.context.setAuth({
-          isAuthenticated: true,
-          errorMsg: "",
-          token,
-          user
-        });
-      })
-      // on failure
-      .catch(err => {
-        const errorMsg = err.response.data.msg;
-
-        this.context.setAuth({
-          isAuthenticated: false,
-          errorMsg,
-          token: "",
-          tokenConfig: {},
-          user: {}
-        });
-      });
+    const { email, password } = this.state;
+    const credentials = { email, password };
+    this.context.login(credentials);
   };
 
   render() {

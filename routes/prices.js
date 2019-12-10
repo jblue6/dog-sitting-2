@@ -2,39 +2,58 @@ const express = require("express");
 const router = express.Router();
 
 const auth = require("../middleware/auth");
-const Prices = require("../models/Prices");
+const Price = require("../models/Price");
 
 router.get("/", (req, res) => {
-  Prices
+  Price
     .find()
     .then(data => res.json(data))
     .catch(err => res.status(404).json({ success: false }));
 });
 
-router.post("/", (req, res) => {
+router.post("/", auth, (req, res) => {
   const { prices } = req.body;
 
   prices.forEach(price => {
     const exists = price._id;
     const { description, basis, rate } = price;
+
     if (exists) {
-      Prices
+      // update existing
+      Price
         .updateOne({ _id: price._id }, { description, basis, rate }, { upsert: true })
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
+        .then(data => { })
+        .catch(err => { })
     } else {
-      const newPrices = new Prices({ description, basis, rate });
+      // add new
+      const newPrices = new Price({ description, basis, rate });
       newPrices
         .save()
+        .then(data => { })
+        .catch(err => { })
     }
   });
 
-  let existingPrices;
-  Prices
+  // delete deleted
+  Price
     .find()
-    .then(data => {
-      existingPrices = data;
-      res.json(existingPrices);
+    .then(existingPrices => {
+      existingPrices.forEach(price => {
+        const { _id } = price;
+
+        let inCurrent = false;
+        prices.forEach(currentPrice => {
+          if (currentPrice._id)
+            if (currentPrice._id.toString() === _id.toString()) inCurrent = true;
+        });
+
+        if (!inCurrent) {
+          Price
+            .findById(_id)
+            .then(data => data.remove().then(() => { }))
+            .catch(err => { });
+        }
+      })
     });
 
 });

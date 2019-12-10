@@ -13,29 +13,25 @@ export class PricesProvider extends Component {
       .get("/api/Prices")
       .then(response => {
         if (response.status !== 200) {
-          console.log(
-            `Looks like there was a problem. Status Code: ${response.status}`
-          );
           return;
         }
+
         this.setState({ prices: response.data });
       })
       .catch(function (err) {
         console.log("", err);
       });
   }
-  setPrices = prices => {
+
+  setPrices = (prices, tokenConfig) => {
     axios
-      .post(`/api/prices/`, { prices })
+      .post(`/api/prices/`, { prices }, tokenConfig)
       .then(response => {
         if (response.status !== 200) {
-          console.log(
-            `Looks like there was a problem. Status Code: ${response.status}`
-          );
           return;
         }
-        console.log(response);
-        this.setState(prices);
+
+        this.setState({ prices });
       })
       .catch(function (err) {
         console.log("", err);
@@ -44,8 +40,9 @@ export class PricesProvider extends Component {
 
   render() {
     const { prices } = this.state;
+    const { setPrices } = this;
     return (
-      <PricesContext.Provider value={{ prices, setPrices: this.setPrices }}>
+      <PricesContext.Provider value={{ prices, setPrices }}>
         {this.props.children}
       </PricesContext.Provider>
     );

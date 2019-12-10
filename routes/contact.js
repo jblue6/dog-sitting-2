@@ -2,36 +2,36 @@ const express = require("express");
 const router = express.Router();
 
 const auth = require("../middleware/auth");
-const Information = require("../models/Information");
+const Contact = require("../models/Contact");
 
 router.get("/", (req, res) => {
-  Information
+  Contact
     .find()
     .then(data => res.json(data[0]))
     .catch(err => res.status(404).json({ success: false }));;
 });
 
 router.post("/", auth, (req, res) => {
-  const newInformation = new Information({
-    title: req.body.title,
-    about: req.body.about
+  const newContact = new Contact({
+    phone: req.body.phone,
+    email: req.body.email
   });
-  newInformation
+  newContact
     .save()
     .then(data => res.json(data))
     .catch(err => res.status(404));
 });
 
 router.put("/:id", auth, (req, res) => {
-  const { title, about } = req.body;
-  Information
-    .updateOne({ _id: req.params.id }, { title, about }, { upsert: true })
+  const { phone, email } = req.body;
+  Contact
+    .updateOne({ _id: req.params.id }, { phone, email }, { upsert: true })
     .then(() => res.json({ success: true }))
     .catch(err => res.status(404).json({ success: false }));
 });
 
 router.delete("/:id", auth, (req, res) => {
-  Information
+  Contact
     .findById(req.params.id)
     .then(data => data.remove().then(() => res.json({ success: true })))
     .catch(err => res.status(404).json({ success: false }));

@@ -11,9 +11,9 @@ class PriceEditor extends Component {
   };
 
   deleteRow = e => {
-    const rowID = e.target.parentElement.parentElement.id;
+    const rowID = parseInt(e.target.parentElement.parentElement.id);
     const { prices } = this.state;
-    const newPrices = prices.filter(price => price._id !== rowID);
+    const newPrices = prices.filter((price, index) => index !== rowID);
     this.setState({ prices: newPrices });
   };
 
@@ -24,13 +24,13 @@ class PriceEditor extends Component {
   };
 
   updateRow = e => {
-    const rowID = e.target.parentElement.parentElement.id;
+    const rowID = parseInt(e.target.parentElement.parentElement.id);
     let { value, name } = e.target
     if (name === "rate") value = parseFloat(value);
 
     const { prices } = this.state;
-    prices.forEach(price => {
-      if (price._id === rowID) price[name] = value;
+    prices.forEach((price, index) => {
+      if (index === rowID) price[name] = value;
     })
 
     this.setState({ prices });
@@ -39,7 +39,8 @@ class PriceEditor extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { prices } = this.state;
-    this.context.setPrices(prices);
+    const { tokenConfig } = this.props;
+    this.context.setPrices(prices, tokenConfig);
   };
 
   componentDidMount() {
@@ -48,7 +49,7 @@ class PriceEditor extends Component {
   }
 
   render() {
-    const { prices } = this.state;
+    const { prices } = this.context;
     const inputStyle = {
       backgroundColor: "transparent",
       color: "white",
@@ -69,7 +70,7 @@ class PriceEditor extends Component {
           </thead>
           <tbody>
             {prices.map((price, index) => (
-              <tr key={price._id} id={price._id} onChange={this.updateRow}>
+              <tr key={index} id={index} onChange={this.updateRow}>
                 <td>
                   <input
                     style={inputStyle}

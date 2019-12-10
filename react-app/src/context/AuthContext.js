@@ -1,4 +1,5 @@
 import React, { createContext, Component } from "react";
+import axios from "axios";
 
 export const AuthContext = createContext();
 
@@ -13,28 +14,65 @@ export class AuthProvider extends Component {
     }
   };
 
-  setAuth = auth => {
-    const token = auth.token;
+  login = credentials => {
+    const body = JSON.stringify(credentials);
 
-    const tokenConfig = {
+    const config = {
       headers: {
-        "Content-type": "application/json"
+        "Content-Type": "application/json"
       }
     };
 
-    if (token) {
-      tokenConfig.headers["x-auth-token"] = token;
-    }
+    axios
+      .post("/api/auth", body, config)
+      // on success
+      .then(res => {
+        const { token, user } = res.data;
 
-    auth.tokenConfig = tokenConfig;
+        const tokenConfig = {
+          headers: {
+            "Content-type": "application/json"
+          }
+        };
 
-    this.setState({ auth });
-  };
+        if (token) {
+          tokenConfig.headers["x-auth-token"] = token;
+        }
+
+        this.setState({
+          auth: {
+            isAuthenticated: true,
+            errorMsg: "",
+            token,
+            tokenConfig,
+            user
+          }
+        });
+      })
+      // on failure
+      .catch(err => {
+        const errorMsg = err.response.data.msg;
+        this.logout(errorMsg);
+      });
+  }
+
+  logout = (errorMsg = "") => {
+    this.setState({
+      auth: {
+        isAuthenticated: false,
+        errorMsg,
+        token: "",
+        tokenConfig: {},
+        user: {}
+      }
+    });
+  }
 
   render() {
     const { auth } = this.state;
+    const { login, logout } = this;
     return (
-      <AuthContext.Provider value={{ auth, setAuth: this.setAuth }}>
+      <AuthContext.Provider value={{ auth, login, logout }}>
         {this.props.children}
       </AuthContext.Provider>
     );
