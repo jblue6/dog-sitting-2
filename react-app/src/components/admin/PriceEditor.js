@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Form, Table, Button } from "react-bootstrap";
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
+import UpdateMessage from "./UpdateMessage";
 
 import { PricesContext } from "../../context/PricesContext";
 
@@ -50,7 +51,8 @@ class PriceEditor extends Component {
   }
 
   render() {
-    const { prices, responseMsg } = this.context;
+    const { prices, responseMsg } = this.state;
+
     const inputStyle = {
       backgroundColor: "transparent",
       color: "white",
@@ -103,12 +105,7 @@ class PriceEditor extends Component {
           </tbody>
         </Table>
 
-        <ReactCSSTransitionGroup
-          transitionName="example"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}>
-          <div>{responseMsg}</div>
-        </ReactCSSTransitionGroup>
+        <UpdateMessage responseMsg={responseMsg} />
 
         <Button variant="secondary" onClick={this.addRow}>
           Add Row

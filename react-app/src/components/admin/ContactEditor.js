@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Form, Button } from "react-bootstrap";
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
+import UpdateMessage from "./UpdateMessage"
 
 import { ContactContext } from "../../context/ContactContext";
 
@@ -58,14 +59,9 @@ class ContactEditor extends Component {
             />
           </Form.Group>
 
-          <ReactCSSTransitionGroup
-            transitionName="example"
-            transitionEnterTimeout={500}
-            transitionLeaveTimeout={300}>
-            <div>{responseMsg}</div>
-          </ReactCSSTransitionGroup>
+          <UpdateMessage responseMsg={responseMsg} />
 
-          <Button variant="primary" type="submit" className="float-right ml-2">
+          <Button variant="primary" type="submit" className="float-right ml-2 mb-5">
             Update
           </Button>
         </Form>

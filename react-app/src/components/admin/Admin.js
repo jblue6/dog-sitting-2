@@ -35,10 +35,10 @@ class Admin extends Component {
         <ContactEditor tokenConfig={tokenConfig} />
       </div>
     ) : (
-      <LoginModal />
-    );
+        <LoginModal />
+      );
 
-    return <Container>{content}</Container>;
+    return <Container className="mt-2">{content}</Container>;
   }
 }
 
