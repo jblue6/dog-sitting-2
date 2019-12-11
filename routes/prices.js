@@ -13,6 +13,9 @@ router.get("/", (req, res) => {
 
 router.post("/", auth, (req, res) => {
   const { prices } = req.body;
+  let changes = prices.length;
+
+  const sendRes = () => res.json({ success: true });
 
   prices.forEach(price => {
     const exists = price._id;
@@ -22,19 +25,24 @@ router.post("/", auth, (req, res) => {
       // update existing
       Price
         .updateOne({ _id: price._id }, { description, basis, rate }, { upsert: true })
-        .then(data => { })
-        .catch(err => { })
+        .then(data => {
+          changes--;
+          if (changes === 0) sendRes();
+        })
+        .catch(err => res.status(404).json({ success: false }))
     } else {
       // add new
       const newPrices = new Price({ description, basis, rate });
       newPrices
         .save()
-        .then(data => { })
-        .catch(err => { })
+        .then(data => {
+          changes--;
+          if (changes === 0) sendRes();
+        })
+        .catch(err => res.status(404).json({ success: false }));
     }
   });
 
-  // delete deleted
   Price
     .find()
     .then(existingPrices => {
@@ -50,7 +58,9 @@ router.post("/", auth, (req, res) => {
         if (!inCurrent) {
           Price
             .findById(_id)
-            .then(data => data.remove().then(() => { }))
+            .then(data => data.remove().then(() => {
+              changes--;
+            }))
             .catch(err => { });
         }
       })

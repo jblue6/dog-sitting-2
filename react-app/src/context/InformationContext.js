@@ -8,7 +8,8 @@ InformationContext.displayName = "InformationContext";
 // create the provider
 export class InformationProvider extends Component {
   state = {
-    information: {}
+    information: {},
+    responseMsg: ""
   };
 
   componentDidMount() {
@@ -32,12 +33,13 @@ export class InformationProvider extends Component {
       .put(`/api/information/${_id}`, information, tokenConfig)
       .then(response => {
         if (response.status !== 200) {
+          this.setState({ responseMsg: "Update Failed" });
           return;
         }
 
         const { title, about } = information;
         const newInformation = { _id, title, about }
-        this.setState({ information: newInformation });
+        this.setState({ information: newInformation, responseMsg: "Succesfully Updated" });
       })
       .catch(function (err) {
         console.log("", err);
@@ -45,10 +47,10 @@ export class InformationProvider extends Component {
   };
 
   render() {
-    const { information } = this.state;
+    const { information, responseMsg } = this.state;
     const { setInformation } = this;
     return (
-      <InformationContext.Provider value={{ information, setInformation }}>
+      <InformationContext.Provider value={{ information, setInformation, responseMsg }}>
         {this.props.children}
       </InformationContext.Provider >
     );

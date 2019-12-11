@@ -5,7 +5,8 @@ export const PricesContext = createContext();
 
 export class PricesProvider extends Component {
   state = {
-    prices: []
+    prices: [],
+    responseMsg: ""
   };
 
   componentDidMount() {
@@ -28,10 +29,11 @@ export class PricesProvider extends Component {
       .post(`/api/prices/`, { prices }, tokenConfig)
       .then(response => {
         if (response.status !== 200) {
+          this.setState({ responseMsg: "Update Failed" });
           return;
         }
 
-        this.setState({ prices });
+        this.setState({ prices, responseMsg: "Succesfully Updated" });
       })
       .catch(function (err) {
         console.log("", err);
@@ -39,10 +41,10 @@ export class PricesProvider extends Component {
   };
 
   render() {
-    const { prices } = this.state;
+    const { prices, responseMsg } = this.state;
     const { setPrices } = this;
     return (
-      <PricesContext.Provider value={{ prices, setPrices }}>
+      <PricesContext.Provider value={{ prices, setPrices, responseMsg }}>
         {this.props.children}
       </PricesContext.Provider>
     );

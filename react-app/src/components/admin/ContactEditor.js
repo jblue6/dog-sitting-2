@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-
 import { Form, Button } from "react-bootstrap";
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import { ContactContext } from "../../context/ContactContext";
 
@@ -33,6 +33,7 @@ class ContactEditor extends Component {
 
   render() {
     const { email, phone } = this.context.contact;
+    const { responseMsg } = this.context;
 
     return (
       <div className="mt-5">
@@ -56,6 +57,13 @@ class ContactEditor extends Component {
               onChange={this.setphone}
             />
           </Form.Group>
+
+          <ReactCSSTransitionGroup
+            transitionName="example"
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={300}>
+            <div>{responseMsg}</div>
+          </ReactCSSTransitionGroup>
 
           <Button variant="primary" type="submit" className="float-right ml-2">
             Update

@@ -5,7 +5,8 @@ export const ContactContext = createContext();
 
 export class ContactProvider extends Component {
   state = {
-    contact: {}
+    contact: {},
+    responseMsg: ""
   };
 
   componentDidMount = () => {
@@ -23,15 +24,30 @@ export class ContactProvider extends Component {
       });
   }
 
-  setContact = () => {
+  setContact = (contact, tokenConfig) => {
+    const { _id } = this.state.contact;
+    axios
+      .put(`/api/contact/${_id}`, contact, tokenConfig)
+      .then(response => {
+        if (response.status !== 200) {
+          this.setState({ responseMsg: "Update Failed" });
+          return;
+        }
 
+        const { email, phone } = contact;
+        const newContact = { _id, email, phone }
+        this.setState({ contact: newContact, responseMsg: "Succesfully Updated" });
+      })
+      .catch(function (err) {
+        console.log("", err);
+      });
   }
 
   render() {
-    const { contact } = this.state;
+    const { contact, responseMsg } = this.state;
     const { setContact } = this;
     return (
-      <ContactContext.Provider value={{ contact, setContact }}>
+      <ContactContext.Provider value={{ contact, setContact, responseMsg }}>
         {this.props.children}
       </ContactContext.Provider>
     );
