@@ -10,15 +10,15 @@ const User = require("../models/User");
 // @route POST api/users
 // @desc Register new user
 // @access Public
-router.post("/", (req, res) => {
-  console.log(req.body);
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ msg: "Please enter all fields" });
-  }
+router.post("/", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ msg: "Please enter all fields" });
+    }
 
-  //check for existing user
-  User.findOne({ email }).then(user => {
+    //check for existing user
+    const user = await User.findOne({ email });
     if (user) return res.status(400).json({ msg: "User already exists" });
 
     const newUser = new User({
@@ -27,32 +27,32 @@ router.post("/", (req, res) => {
     });
 
     // Create salt and hash
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(newUser.password, salt, (err, hash) => {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(newUser.password, salt);
+    newUser.password = hash;
+
+    const user = await newUser.save();
+
+    // json web token signature
+    jwt.sign(
+      //the payload
+      { id: user.id },
+      config.get("jwtSecret"),
+      { expiresIn: 3600 },
+      (err, token) => {
         if (err) throw err;
-        newUser.password = hash;
-        newUser.save().then(user => {
-          // json web token signature
-          jwt.sign(
-            //the payload
-            { id: user.id },
-            config.get("jwtSecret"),
-            { expiresIn: 3600 },
-            (err, token) => {
-              if (err) throw err;
-              res.json({
-                token,
-                user: {
-                  id: user.id,
-                  email: user.email
-                }
-              });
-            }
-          );
+        res.json({
+          token,
+          user: {
+            id: user.id,
+            email: user.email
+          }
         });
-      });
-    });
-  });
+      }
+    );
+  } catch (err) {
+    res.status(400).json({ err, msg: "Register Failed" });
+  }
 });
 
 module.exports = router;
