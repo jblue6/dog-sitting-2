@@ -17,7 +17,7 @@ class Admin extends Component {
   };
 
   render() {
-    const { isAuthenticated, errorMsg, tokenConfig } = this.context.auth;
+    const { isAuthenticated, errorMsg } = this.context.auth;
 
     const content = isAuthenticated ? (
       <div>
@@ -28,11 +28,11 @@ class Admin extends Component {
 
         <div>Login Successful</div>
 
-        <InformationEditor tokenConfig={tokenConfig} />
+        <InformationEditor />
 
-        <PriceEditor tokenConfig={tokenConfig} />
+        <PriceEditor />
 
-        <ContactEditor tokenConfig={tokenConfig} />
+        <ContactEditor />
       </div>
     ) : (
         <LoginModal />

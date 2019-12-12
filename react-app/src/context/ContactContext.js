@@ -24,7 +24,17 @@ export class ContactProvider extends Component {
       });
   }
 
-  setContact = (contact, tokenConfig) => {
+  setContact = contact => {
+    const token = localStorage.getItem("token");
+    if (!token) return this.setState({ responseMsg: "User not authenticated" });
+
+    const tokenConfig = {
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token
+      }
+    };
+
     const { _id } = this.state.contact;
     axios
       .put(`/api/contact/${_id}`, contact, tokenConfig)

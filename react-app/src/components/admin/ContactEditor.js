@@ -13,8 +13,7 @@ class ContactEditor extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { email, phone } = this.state;
-    const { tokenConfig } = this.props;
-    this.context.setContact({ email, phone }, tokenConfig);
+    this.context.setContact({ email, phone });
   };
 
   setEmail = e => {
@@ -27,13 +26,13 @@ class ContactEditor extends Component {
     this.setState({ phone });
   };
 
-  componentDidMount = () => {
+  componentDidUpdate() {
     const { email, phone } = this.context.contact;
-    this.setState({ email, phone });
+    if (this.state.email !== email) this.setState({ email, phone });
   };
 
   render() {
-    const { email, phone } = this.context.contact;
+    const { email, phone } = this.state;
     const { responseMsg } = this.context;
 
     return (

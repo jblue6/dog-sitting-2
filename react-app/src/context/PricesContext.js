@@ -24,7 +24,17 @@ export class PricesProvider extends Component {
       });
   }
 
-  setPrices = (prices, tokenConfig) => {
+  setPrices = prices => {
+    const token = localStorage.getItem("token");
+    if (!token) return this.setState({ responseMsg: "User not authenticated" });
+
+    const tokenConfig = {
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token
+      }
+    };
+
     axios
       .post(`/api/prices/`, { prices }, tokenConfig)
       .then(response => {

@@ -7,9 +7,7 @@ export class AuthProvider extends Component {
   state = {
     auth: {
       isAuthenticated: false,
-      errorMsg: "",
-      tokenConfig: {},
-      user: {}
+      errorMsg: ""
     }
   };
 
@@ -26,26 +24,15 @@ export class AuthProvider extends Component {
       .post("/api/auth", body, config)
       // on success
       .then(res => {
-        const { token, user } = res.data;
+        const { token } = res.data;
 
         // set token to local storage
-
-        const tokenConfig = {
-          headers: {
-            "Content-type": "application/json"
-          }
-        };
-
-        if (token) {
-          tokenConfig.headers["x-auth-token"] = token;
-        }
+        localStorage.setItem("token", token);
 
         this.setState({
           auth: {
             isAuthenticated: true,
-            errorMsg: "",
-            tokenConfig,
-            user
+            errorMsg: ""
           }
         });
       })
@@ -60,12 +47,16 @@ export class AuthProvider extends Component {
     this.setState({
       auth: {
         isAuthenticated: false,
-        errorMsg,
-        tokenConfig: {},
-        user: {}
+        errorMsg
       }
     });
+    localStorage.removeItem("token");
   };
+
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+    if (token) this.setState({ auth: { isAuthenticated: true } });
+  }
 
   render() {
     const { auth } = this.state;

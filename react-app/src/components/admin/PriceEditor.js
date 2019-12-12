@@ -41,13 +41,13 @@ class PriceEditor extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { prices } = this.state;
-    const { tokenConfig } = this.props;
-    this.context.setPrices(prices, tokenConfig);
+    this.context.setPrices(prices);
   };
 
-  componentDidMount() {
+  componentDidUpdate() {
+    // needs reviewing
     const { prices } = this.context;
-    this.setState({ prices });
+    if (this.state.prices.length !== prices.length) this.setState({ prices });
   }
 
   render() {

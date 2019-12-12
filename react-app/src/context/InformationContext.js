@@ -27,14 +27,24 @@ export class InformationProvider extends Component {
       });
   }
 
-  setInformation = (information, tokenConfig) => {
+  setInformation = information => {
     const { _id } = this.state.information;
+
+    const token = localStorage.getItem("token");
+    if (!token) return this.setState({ responseMsg: "User not authenticated" });
+
+    const tokenConfig = {
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token
+      }
+    };
+
     axios
       .put(`/api/information/${_id}`, information, tokenConfig)
       .then(response => {
         if (response.status !== 200) {
-          this.setState({ responseMsg: "Update Failed" });
-          return;
+          return this.setState({ responseMsg: "Update Failed" });
         }
 
         const { title, about } = information;

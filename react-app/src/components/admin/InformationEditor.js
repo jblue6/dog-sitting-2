@@ -13,8 +13,7 @@ class InformationEditor extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { title, about } = this.state;
-    const { tokenConfig } = this.props;
-    this.context.setInformation({ title, about }, tokenConfig);
+    this.context.setInformation({ title, about });
   };
 
   setTitle = e => {
@@ -27,13 +26,13 @@ class InformationEditor extends Component {
     this.setState({ about });
   };
 
-  componentDidMount = () => {
+  componentDidUpdate() {
     const { title, about } = this.context.information;
-    this.setState({ title, about });
-  };
+    if (this.state.title !== title) this.setState({ title, about })
+  }
 
   render() {
-    const { title, about } = this.context.information;
+    const { title, about } = this.state;
     const { responseMsg } = this.context;
 
     return (
