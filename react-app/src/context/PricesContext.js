@@ -9,22 +9,7 @@ export class PricesProvider extends Component {
     responseMsg: ""
   };
 
-  componentDidMount() {
-    axios
-      .get("/api/Prices")
-      .then(response => {
-        if (response.status !== 200) {
-          return;
-        }
-
-        this.setState({ prices: response.data });
-      })
-      .catch(function (err) {
-        console.log("", err);
-      });
-  }
-
-  setPrices = prices => {
+  setPrices = (prices) => {
     const token = localStorage.getItem("token");
     if (!token) return this.setState({ responseMsg: "User not authenticated" });
 
@@ -49,6 +34,21 @@ export class PricesProvider extends Component {
         console.log("", err);
       });
   };
+
+  componentDidMount() {
+    axios
+      .get("/api/Prices")
+      .then(response => {
+        if (response.status !== 200) {
+          return;
+        }
+
+        this.setState({ prices: response.data });
+      })
+      .catch(function (err) {
+        console.log("", err);
+      });
+  }
 
   render() {
     const { prices, responseMsg } = this.state;

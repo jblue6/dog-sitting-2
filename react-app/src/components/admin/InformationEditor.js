@@ -8,31 +8,23 @@ import { InformationContext } from "../../context/InformationContext";
 class InformationEditor extends Component {
   static contextType = InformationContext;
 
-  state = { title: "", about: "" };
-
   handleSubmit = e => {
     e.preventDefault();
-    const { title, about } = this.state;
-    this.context.setInformation({ title, about });
+    this.context.setInformation();
   };
 
   setTitle = e => {
     const title = e.target.value;
-    this.setState({ title });
+    this.context.setTitle(title);
   };
 
   setAbout = e => {
     const about = e.target.value;
-    this.setState({ about });
+    this.context.setAbout(about);
   };
 
-  componentDidUpdate() {
-    const { title, about } = this.context.information;
-    if (this.state.title !== title) this.setState({ title, about })
-  }
-
   render() {
-    const { title, about } = this.state;
+    const { title, about } = this.context.information;
     const { responseMsg } = this.context;
 
     return (

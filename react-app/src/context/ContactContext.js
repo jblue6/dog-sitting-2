@@ -9,22 +9,20 @@ export class ContactProvider extends Component {
     responseMsg: ""
   };
 
-  componentDidMount = () => {
-    axios
-      .get("/api/contact")
-      .then(response => {
-        if (response.status !== 200) {
-          return;
-        }
+  setEmail = email => {
+    const currentContact = this.state.contact;
+    this.setState({ contact: { ...currentContact, email } });
+  };
 
-        this.setState({ contact: response.data });
-      })
-      .catch(function (err) {
-        console.log("", err);
-      });
-  }
+  setPhone = phone => {
+    const currentContact = this.state.contact;
+    this.setState({ contact: { ...currentContact, phone } });
+  };
 
-  setContact = contact => {
+  setContact = () => {
+    const { contact } = this.state;
+    const { _id } = contact;
+
     const token = localStorage.getItem("token");
     if (!token) return this.setState({ responseMsg: "User not authenticated" });
 
@@ -35,7 +33,6 @@ export class ContactProvider extends Component {
       }
     };
 
-    const { _id } = this.state.contact;
     axios
       .put(`/api/contact/${_id}`, contact, tokenConfig)
       .then(response => {
@@ -53,11 +50,26 @@ export class ContactProvider extends Component {
       });
   }
 
+  componentDidMount = () => {
+    axios
+      .get("/api/contact")
+      .then(response => {
+        if (response.status !== 200) {
+          return;
+        }
+
+        this.setState({ contact: response.data });
+      })
+      .catch(function (err) {
+        console.log("", err);
+      });
+  }
+
   render() {
     const { contact, responseMsg } = this.state;
-    const { setContact } = this;
+    const { setContact, setPhone, setEmail } = this;
     return (
-      <ContactContext.Provider value={{ contact, setContact, responseMsg }}>
+      <ContactContext.Provider value={{ contact, setContact, setPhone, setEmail, responseMsg }}>
         {this.props.children}
       </ContactContext.Provider>
     );

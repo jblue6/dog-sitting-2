@@ -8,31 +8,23 @@ import { ContactContext } from "../../context/ContactContext";
 class ContactEditor extends Component {
   static contextType = ContactContext;
 
-  state = { email: "", phone: "" };
-
   handleSubmit = e => {
     e.preventDefault();
-    const { email, phone } = this.state;
-    this.context.setContact({ email, phone });
+    this.context.setContact();
   };
 
   setEmail = e => {
     const email = e.target.value;
-    this.setState({ email });
+    this.context.setEmail(email);
   };
 
   setPhone = e => {
     const phone = e.target.value;
-    this.setState({ phone });
-  };
-
-  componentDidUpdate() {
-    const { email, phone } = this.context.contact;
-    if (this.state.email !== email) this.setState({ email, phone });
+    this.context.setPhone(phone);
   };
 
   render() {
-    const { email, phone } = this.state;
+    const { email, phone } = this.context.contact;
     const { responseMsg } = this.context;
 
     return (
@@ -54,7 +46,7 @@ class ContactEditor extends Component {
               type="text"
               placeholder={phone}
               defaultValue={phone}
-              onChange={this.setphone}
+              onChange={this.setPhone}
             />
           </Form.Group>
 

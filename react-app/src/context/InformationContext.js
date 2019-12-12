@@ -12,23 +12,19 @@ export class InformationProvider extends Component {
     responseMsg: ""
   };
 
-  componentDidMount() {
-    axios
-      .get("/api/information")
-      .then(response => {
-        if (response.status !== 200) {
-          return;
-        }
-
-        this.setState({ information: response.data });
-      })
-      .catch(function (err) {
-        console.log("", err);
-      });
+  setTitle = title => {
+    const currentInfo = this.state.information;
+    this.setState({ information: { ...currentInfo, title } });
   }
 
-  setInformation = information => {
-    const { _id } = this.state.information;
+  setAbout = about => {
+    const currentInfo = this.state.information;
+    this.setState({ information: { ...currentInfo, about } });
+  }
+
+  setInformation = () => {
+    const { information } = this.state;
+    const { _id } = information;
 
     const token = localStorage.getItem("token");
     if (!token) return this.setState({ responseMsg: "User not authenticated" });
@@ -56,11 +52,26 @@ export class InformationProvider extends Component {
       });
   };
 
+  componentDidMount() {
+    axios
+      .get("/api/information")
+      .then(response => {
+        if (response.status !== 200) {
+          return;
+        }
+
+        this.setState({ information: response.data });
+      })
+      .catch(function (err) {
+        console.log("", err);
+      });
+  }
+
   render() {
     const { information, responseMsg } = this.state;
-    const { setInformation } = this;
+    const { setInformation, setTitle, setAbout } = this;
     return (
-      <InformationContext.Provider value={{ information, setInformation, responseMsg }}>
+      <InformationContext.Provider value={{ information, setInformation, setTitle, setAbout, responseMsg }}>
         {this.props.children}
       </InformationContext.Provider >
     );

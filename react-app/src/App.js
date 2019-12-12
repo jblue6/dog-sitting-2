@@ -10,7 +10,6 @@ import Prices from "./components/prices/Prices";
 import { InformationProvider } from "./context/InformationContext";
 import { PricesProvider } from "./context/PricesContext";
 import { AuthProvider } from "./context/AuthContext";
-import { ContactProvider } from "./context/ContactContext";
 
 function App() {
   return (
@@ -20,13 +19,7 @@ function App() {
           <NavBar />
           <Switch>
             <Route path="/admin">
-              <InformationProvider>
-                <PricesProvider>
-                  <ContactProvider>
-                    <Admin />
-                  </ContactProvider>
-                </PricesProvider>
-              </InformationProvider>
+              <Admin />
             </Route>
 
             <Route path="/prices">

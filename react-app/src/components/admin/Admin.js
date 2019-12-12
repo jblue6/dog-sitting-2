@@ -3,6 +3,10 @@ import { Container, Button } from "react-bootstrap";
 
 import { AuthContext } from "../../context/AuthContext";
 
+import { InformationProvider } from "../../context/InformationContext";
+import { PricesProvider } from "../../context/PricesContext";
+import { ContactProvider } from "../../context/ContactContext";
+
 import InformationEditor from "./InformationEditor";
 import PriceEditor from "./PriceEditor";
 import ContactEditor from "./ContactEditor";
@@ -27,12 +31,17 @@ class Admin extends Component {
         </Button>
 
         <div>Login Successful</div>
+        <InformationProvider>
+          <InformationEditor />
+        </InformationProvider>
 
-        <InformationEditor />
+        <PricesProvider>
+          <PriceEditor />
+        </PricesProvider>
 
-        <PriceEditor />
-
-        <ContactEditor />
+        <ContactProvider>
+          <ContactEditor />
+        </ContactProvider>
       </div>
     ) : (
         <LoginModal />
