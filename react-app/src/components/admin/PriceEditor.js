@@ -51,7 +51,8 @@ class PriceEditor extends Component {
   }
 
   render() {
-    const { prices, responseMsg } = this.state;
+    const { prices } = this.state;
+    const { responseMsg } = this.context;
 
     const inputStyle = {
       backgroundColor: "transparent",

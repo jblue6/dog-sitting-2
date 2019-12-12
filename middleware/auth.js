@@ -1,6 +1,6 @@
 // use this middleware function to check whether user is authenticated
-const config = require("config");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 function auth(req, res, next) {
   const token = req.header("x-auth-token");
@@ -11,7 +11,7 @@ function auth(req, res, next) {
 
   try {
     // Verify token
-    const decoded = jwt.verify(token, config.get("jwtSecret"));
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // Add user from payload
     req.user = decoded;
     next();

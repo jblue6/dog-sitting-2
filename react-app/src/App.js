@@ -15,11 +15,11 @@ import { ContactProvider } from "./context/ContactContext";
 function App() {
   return (
     <div className="App">
-      <Router>
-        <NavBar />
-        <Switch>
-          <Route path="/admin">
-            <AuthProvider>
+      <AuthProvider>
+        <Router>
+          <NavBar />
+          <Switch>
+            <Route path="/admin">
               <InformationProvider>
                 <PricesProvider>
                   <ContactProvider>
@@ -27,22 +27,22 @@ function App() {
                   </ContactProvider>
                 </PricesProvider>
               </InformationProvider>
-            </AuthProvider>
-          </Route>
+            </Route>
 
-          <Route path="/prices">
-            <PricesProvider>
-              <Prices />
-            </PricesProvider>
-          </Route>
+            <Route path="/prices">
+              <PricesProvider>
+                <Prices />
+              </PricesProvider>
+            </Route>
 
-          <Route path="/">
-            <InformationProvider>
-              <Home />
-            </InformationProvider>
-          </Route>
-        </Switch>
-      </Router>
+            <Route path="/">
+              <InformationProvider>
+                <Home />
+              </InformationProvider>
+            </Route>
+          </Switch>
+        </Router>
+      </AuthProvider>
     </div>
   );
 }

@@ -8,7 +8,6 @@ export class AuthProvider extends Component {
     auth: {
       isAuthenticated: false,
       errorMsg: "",
-      token: "",
       tokenConfig: {},
       user: {}
     }
@@ -29,6 +28,8 @@ export class AuthProvider extends Component {
       .then(res => {
         const { token, user } = res.data;
 
+        // set token to local storage
+
         const tokenConfig = {
           headers: {
             "Content-type": "application/json"
@@ -43,7 +44,6 @@ export class AuthProvider extends Component {
           auth: {
             isAuthenticated: true,
             errorMsg: "",
-            token,
             tokenConfig,
             user
           }
@@ -61,7 +61,6 @@ export class AuthProvider extends Component {
       auth: {
         isAuthenticated: false,
         errorMsg,
-        token: "",
         tokenConfig: {},
         user: {}
       }

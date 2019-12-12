@@ -1,12 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
-const config = require("config");
+require('dotenv').config();
 
 const app = express();
 app.use(express.json());
 
-const db = config.get("mongoURI");
+const db = process.env.MONGO_URI;
 
 //connect to Mongo
 mongoose
