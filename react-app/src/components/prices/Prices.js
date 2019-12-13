@@ -13,7 +13,8 @@ function Prices() {
   return (
     <div>
       <Container >
-        <div className="mt-3">Prices are shown below. These are estimates, please get in contact for a quote.</div>
+        <h2 className="mt-3">Prices</h2>
+        <div className="mt-2">Prices are shown below. These are estimates, please get in contact for a quote.</div>
         <Table striped hover variant="dark" className="mt-2">
           <thead>
             <tr>

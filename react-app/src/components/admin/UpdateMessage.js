@@ -15,9 +15,11 @@ class UpdateMessage extends Component {
 
   render() {
     const { msg } = this.state;
+
     const content = msg ?
       <div>{msg}</div> :
       <div></div>;
+
     return content;
   }
 }

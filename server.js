@@ -4,8 +4,8 @@ const path = require("path");
 require('dotenv').config();
 
 const app = express();
-app.use(express.json());
 
+const port = process.env.PORT || 5000;
 const db = process.env.MONGO_URI;
 
 //connect to Mongo
@@ -17,6 +17,8 @@ mongoose
   })
   .then(() => console.log("Mongo DB connected"))
   .catch(err => console.log(err));
+
+app.use(express.json());
 
 //use routes
 app.use("/api/information", require("./routes/information"));
@@ -34,5 +36,4 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
