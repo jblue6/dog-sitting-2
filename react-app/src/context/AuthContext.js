@@ -7,6 +7,7 @@ export class AuthProvider extends Component {
   state = {
     auth: {
       isAuthenticated: false,
+      user: {},
       errorMsg: ""
     }
   };
@@ -24,7 +25,7 @@ export class AuthProvider extends Component {
       .post("/api/auth", body, config)
       // on success
       .then(res => {
-        const { token } = res.data;
+        const { token, user } = res.data;
 
         // set token to local storage
         localStorage.setItem("token", token);
@@ -32,6 +33,7 @@ export class AuthProvider extends Component {
         this.setState({
           auth: {
             isAuthenticated: true,
+            user,
             errorMsg: ""
           }
         });
@@ -47,6 +49,7 @@ export class AuthProvider extends Component {
     this.setState({
       auth: {
         isAuthenticated: false,
+        user: {},
         errorMsg
       }
     });
@@ -55,7 +58,33 @@ export class AuthProvider extends Component {
 
   componentDidMount() {
     const token = localStorage.getItem("token");
-    if (token) this.setState({ auth: { isAuthenticated: true } });
+    if (!token) return;
+
+    const tokenConfig = {
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token
+      }
+    };
+
+    // check if user is authenticated
+    axios
+      .get("/api/auth/user", tokenConfig)
+      .then(res => {
+        // if the token is valid
+        const { user } = res.data;
+        this.setState({
+          auth: {
+            isAuthenticated: true,
+            user,
+            errorMsg: ""
+          }
+        })
+      })
+      .catch(err => {
+        // will be triggered if the token is no longer valid
+        console.log(err);
+      });
   }
 
   render() {

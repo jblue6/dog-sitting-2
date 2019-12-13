@@ -17,7 +17,7 @@ function Home() {
       <Container>
         <h2 className="mt-3">{title}</h2>
         <div className="mt-3 mb-2">
-          {aboutArr.map(item => (<div>{item}<br></br></div>))}
+          {aboutArr.map((item, index) => (<div key={index}>{item}<br></br></div>))}
         </div>
         <Images />
       </Container>
