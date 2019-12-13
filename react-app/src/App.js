@@ -14,28 +14,28 @@ import { AuthProvider } from "./context/AuthContext";
 function App() {
   return (
     <div className="App">
-      <AuthProvider>
-        <Router>
-          <NavBar />
-          <Switch>
-            <Route path="/admin">
+      <Router>
+        <NavBar />
+        <Switch>
+          <Route path="/admin">
+            <AuthProvider>
               <Admin />
-            </Route>
+            </AuthProvider>
+          </Route>
 
-            <Route path="/prices">
-              <PricesProvider>
-                <Prices />
-              </PricesProvider>
-            </Route>
+          <Route path="/prices">
+            <PricesProvider>
+              <Prices />
+            </PricesProvider>
+          </Route>
 
-            <Route path="/">
-              <InformationProvider>
-                <Home />
-              </InformationProvider>
-            </Route>
-          </Switch>
-        </Router>
-      </AuthProvider>
+          <Route path="/">
+            <InformationProvider>
+              <Home />
+            </InformationProvider>
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }

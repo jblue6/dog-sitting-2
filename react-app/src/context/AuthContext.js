@@ -83,7 +83,7 @@ export class AuthProvider extends Component {
       })
       .catch(err => {
         // will be triggered if the token is no longer valid
-        console.log(err);
+        this.logout("Session Expired. Please Log in again");
       });
   }
 

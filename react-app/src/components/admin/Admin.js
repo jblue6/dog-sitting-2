@@ -31,6 +31,7 @@ class Admin extends Component {
         </Button>
 
         <div>Login Successful</div>
+
         <InformationProvider>
           <InformationEditor />
         </InformationProvider>
