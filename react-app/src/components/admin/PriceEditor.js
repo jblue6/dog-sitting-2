@@ -8,51 +8,25 @@ import { PricesContext } from "../../context/PricesContext";
 class PriceEditor extends Component {
   static contextType = PricesContext;
 
-  state = {
-    prices: []
-  };
-
   deleteRow = e => {
-    const rowID = parseInt(e.target.parentElement.parentElement.id);
-    const { prices } = this.state;
-    const newPrices = prices.filter((price, index) => index !== rowID);
-    this.setState({ prices: newPrices });
+    this.context.deleteRow(e);
   };
 
   addRow = () => {
-    const { prices } = this.state;
-    const newPrice = { description: "", rate: 0, basis: "" };
-    this.setState({ prices: [...prices, newPrice] });
+    this.context.addRow();
   };
 
   updateRow = e => {
-    const rowID = parseInt(e.target.parentElement.parentElement.id);
-    let { value, name } = e.target;
-    if (name === "rate") value = parseFloat(value);
-
-    const { prices } = this.state;
-    prices.forEach((price, index) => {
-      if (index === rowID) price[name] = value;
-    });
-
-    this.setState({ prices });
+    this.context.updateRow(e);
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    const { prices } = this.state;
-    this.context.setPrices(prices);
+    this.context.setPrices();
   };
 
-  componentDidUpdate() {
-    // needs reviewing
-    const { prices } = this.context;
-    if (this.state.prices.length !== prices.length) this.setState({ prices });
-  }
-
   render() {
-    const { prices } = this.state;
-    const { responseMsg } = this.context;
+    const { prices, responseMsg } = this.context;
 
     const inputStyle = {
       backgroundColor: "transparent",
