@@ -36,14 +36,13 @@ router.post("/", auth, async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(404).json({ success: false })
+    res.status(404).json({ success: false });
   }
 
   try {
     const existingPrices = await Price.find();
     existingPrices.forEach(async price => {
       const { _id } = price;
-      console.log(_id);
       let inCurrent = false;
 
       prices.forEach(currentPrice => {
