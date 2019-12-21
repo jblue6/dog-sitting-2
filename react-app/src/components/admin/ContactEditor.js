@@ -13,16 +13,6 @@ class ContactEditor extends Component {
     this.context.setContact();
   };
 
-  setEmail = e => {
-    const email = e.target.value;
-    this.context.setEmail(email);
-  };
-
-  setPhone = e => {
-    const phone = e.target.value;
-    this.context.setPhone(phone);
-  };
-
   render() {
     const { email, phone } = this.context.contact;
     const { responseMsg } = this.context;
@@ -37,7 +27,7 @@ class ContactEditor extends Component {
               type="email"
               placeholder={email}
               defaultValue={email}
-              onChange={this.setEmail}
+              onChange={this.context.setEmail}
             />
           </Form.Group>
           <Form.Group>
@@ -46,7 +36,7 @@ class ContactEditor extends Component {
               type="text"
               placeholder={phone}
               defaultValue={phone}
-              onChange={this.setPhone}
+              onChange={this.context.setPhone}
             />
           </Form.Group>
 

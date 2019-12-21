@@ -12,12 +12,14 @@ export class InformationProvider extends Component {
     responseMsg: ""
   };
 
-  setTitle = title => {
+  setTitle = e => {
+    const title = e.target.value;
     const currentInfo = this.state.information;
     this.setState({ information: { ...currentInfo, title } });
   }
 
-  setAbout = about => {
+  setAbout = e => {
+    const about = e.target.value;
     const currentInfo = this.state.information;
     this.setState({ information: { ...currentInfo, about } });
   }

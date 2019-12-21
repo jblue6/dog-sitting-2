@@ -13,16 +13,6 @@ class InformationEditor extends Component {
     this.context.setInformation();
   };
 
-  setTitle = e => {
-    const title = e.target.value;
-    this.context.setTitle(title);
-  };
-
-  setAbout = e => {
-    const about = e.target.value;
-    this.context.setAbout(about);
-  };
-
   render() {
     const { title, about } = this.context.information;
     const { responseMsg } = this.context;
@@ -37,7 +27,7 @@ class InformationEditor extends Component {
               type="text"
               placeholder={title}
               defaultValue={title}
-              onChange={this.setTitle}
+              onChange={this.context.setTitle}
             />
           </Form.Group>
           <Form.Group>
@@ -47,7 +37,7 @@ class InformationEditor extends Component {
               placeholder={about}
               defaultValue={about}
               rows="8"
-              onChange={this.setAbout}
+              onChange={this.context.setAbout}
             />
           </Form.Group>
 

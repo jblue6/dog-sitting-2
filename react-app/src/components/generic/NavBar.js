@@ -21,6 +21,7 @@ class NavBar extends Component {
           <Nav className="mr-sm-2">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/prices">Prices</Nav.Link>
+            <Nav.Link href="/booking">Booking</Nav.Link>
             <Nav.Link href="/admin">Admin</Nav.Link>
             <Nav.Link
               href="https://github.com/jblue6/dog-sitting-2"

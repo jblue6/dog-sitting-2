@@ -9,12 +9,14 @@ export class ContactProvider extends Component {
     responseMsg: ""
   };
 
-  setEmail = email => {
+  setEmail = e => {
+    const email = e.target.value;
     const currentContact = this.state.contact;
     this.setState({ contact: { ...currentContact, email } });
   };
 
-  setPhone = phone => {
+  setPhone = e => {
+    const phone = e.target.value;
     const currentContact = this.state.contact;
     this.setState({ contact: { ...currentContact, phone } });
   };

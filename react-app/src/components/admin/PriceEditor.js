@@ -8,18 +8,6 @@ import { PricesContext } from "../../context/PricesContext";
 class PriceEditor extends Component {
   static contextType = PricesContext;
 
-  deleteRow = e => {
-    this.context.deleteRow(e);
-  };
-
-  addRow = () => {
-    this.context.addRow();
-  };
-
-  updateRow = e => {
-    this.context.updateRow(e);
-  };
-
   handleSubmit = e => {
     e.preventDefault();
     this.context.setPrices();
@@ -48,7 +36,7 @@ class PriceEditor extends Component {
           </thead>
           <tbody>
             {prices.map((price, index) => (
-              <tr key={index} id={index} onChange={this.updateRow}>
+              <tr key={index} id={index} onChange={this.context.updateRow}>
                 <td>
                   <input
                     style={inputStyle}
@@ -71,7 +59,7 @@ class PriceEditor extends Component {
                   ></input>
                 </td>
                 <td>
-                  <Button variant="primary" onClick={this.deleteRow}>
+                  <Button variant="primary" onClick={this.context.deleteRow}>
                     X
                   </Button>
                 </td>
@@ -82,7 +70,7 @@ class PriceEditor extends Component {
 
         <UpdateMessage responseMsg={responseMsg} />
 
-        <Button variant="secondary" onClick={this.addRow}>
+        <Button variant="secondary" onClick={this.context.addRow}>
           Add Row
         </Button>
         <Button variant="primary" type="submit" className="float-right ml-2">

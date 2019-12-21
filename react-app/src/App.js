@@ -6,6 +6,7 @@ import NavBar from "./components/generic/NavBar";
 import Home from "./components/home/Home";
 import Admin from "./components/admin/Admin";
 import Prices from "./components/prices/Prices";
+import Booking from "./components/booking/Booking";
 
 import { InformationProvider } from "./context/InformationContext";
 import { PricesProvider } from "./context/PricesContext";
@@ -27,6 +28,10 @@ function App() {
             <PricesProvider>
               <Prices />
             </PricesProvider>
+          </Route>
+
+          <Route path="/booking">
+            <Booking />
           </Route>
 
           <Route path="/">
