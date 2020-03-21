@@ -12,7 +12,7 @@ export class AuthProvider extends Component {
     }
   };
 
-  login = credentials => {
+  login = (credentials) => {
     const body = JSON.stringify(credentials);
 
     const config = {

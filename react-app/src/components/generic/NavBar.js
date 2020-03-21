@@ -1,10 +1,19 @@
 import React, { Component } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 
+import { AuthContext } from "../../context/AuthContext";
+
 class NavBar extends Component {
+  static contextType = AuthContext;
+
   state = {
     onHomePage: true
   };
+
+  buttonClicked = e => {
+    e.preventDefault();
+    this.context.logout();
+  }
 
   componentDidMount() {
     const onHomePage = window.location.pathname === "/";
@@ -14,6 +23,8 @@ class NavBar extends Component {
   }
 
   render() {
+    const { isAuthenticated } = this.context.auth;
+
     return (
       <Navbar bg="light" variant="light">
         <Container>
@@ -21,8 +32,18 @@ class NavBar extends Component {
           <Nav className="mr-sm-2">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/prices">Prices</Nav.Link>
-            <Nav.Link href="/booking">Booking</Nav.Link>
-            <Nav.Link href="/admin">Admin</Nav.Link>
+            {
+              isAuthenticated ?
+                <>
+                  <Nav.Link href="/booking">Booking</Nav.Link>
+                  <Nav.Link href="/admin">Admin</Nav.Link>
+                  <Nav.Link href="/account">Account</Nav.Link>
+                  <Nav.Link onClick={this.buttonClicked}>Logout</Nav.Link>
+                </> : <>
+                  <Nav.Link href="/login">Login</Nav.Link>
+                  <Nav.Link href="/register">Register</Nav.Link>
+                </>
+            }
             <Nav.Link
               href="https://github.com/jblue6/dog-sitting-2"
               target="_blank"

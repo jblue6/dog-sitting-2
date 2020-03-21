@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Button } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 
 import { AuthContext } from "../../context/AuthContext";
 
@@ -10,7 +10,6 @@ import { ContactProvider } from "../../context/ContactContext";
 import InformationEditor from "./InformationEditor";
 import PriceEditor from "./PriceEditor";
 import ContactEditor from "./ContactEditor";
-import LoginModal from "./LoginModal";
 
 class Admin extends Component {
   static contextType = AuthContext;
@@ -26,12 +25,6 @@ class Admin extends Component {
     const content = isAuthenticated ? (
       <div>
         <div>{errorMsg}</div>
-        <Button className="float-right" onClick={this.logout}>
-          Logout
-        </Button>
-
-        <div>Login Successful</div>
-
         <InformationProvider>
           <InformationEditor />
         </InformationProvider>
@@ -45,7 +38,8 @@ class Admin extends Component {
         </ContactProvider>
       </div>
     ) : (
-        <LoginModal />
+        //<Redirect to="/" />
+        <div>Logged Out</div>
       );
 
     return <Container className="mt-2">{content}</Container>;

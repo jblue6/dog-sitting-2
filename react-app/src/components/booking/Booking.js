@@ -1,21 +1,55 @@
-import React from 'react'
+import React, { Component } from "react";
+import { Container, Button } from "react-bootstrap";
 
-import { ContactProvider } from "../../context/ContactContext";
+import { AuthContext } from "../../context/AuthContext";
 
-import Footer from '../generic/Footer'
-import { Container } from 'react-bootstrap';
+import BookingList from "./BookingList";
+import BookingForm from "./BookingForm";
 
-function Booking() {
-  return (
-    <div>
-      <Container>
-        <h2 className="mt-3">Coming Soon...</h2>
-      </Container>
+class Booking extends Component {
+  static contextType = AuthContext;
 
-      <ContactProvider>
-        <Footer />
-      </ContactProvider>
-    </div>)
+  state = { viewCurrentBookings: true }
+
+  logout = e => {
+    e.preventDefault();
+    this.context.logout();
+  };
+
+  toggleView = viewCurrentBookings => {
+    this.setState({ viewCurrentBookings })
+  }
+
+  render() {
+    const { viewCurrentBookings } = this.state;
+    const bookingContent = viewCurrentBookings ? (
+      <>
+        <Button onClick={() => this.toggleView(false)}>
+          Make a New Booking
+        </Button>
+        <BookingList />
+      </>) : (
+        <>
+          <Button onClick={() => this.toggleView(true)}>
+            View Current Bookings
+        </Button>
+          <BookingForm />
+        </>
+      )
+
+    const { isAuthenticated, errorMsg } = this.context.auth;
+    const content = isAuthenticated ? (
+      <div>
+        <div>{errorMsg}</div>
+        {bookingContent}
+      </div>
+    ) : (
+        //<Redirect to="/" />
+        <div>Logged Out</div>
+      );
+
+    return <Container className="mt-2">{content}</Container>;
+  }
 }
 
 export default Booking;

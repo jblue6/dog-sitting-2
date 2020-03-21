@@ -12,18 +12,6 @@ export class InformationProvider extends Component {
     responseMsg: ""
   };
 
-  setTitle = e => {
-    const title = e.target.value;
-    const currentInfo = this.state.information;
-    this.setState({ information: { ...currentInfo, title } });
-  }
-
-  setAbout = e => {
-    const about = e.target.value;
-    const currentInfo = this.state.information;
-    this.setState({ information: { ...currentInfo, about } });
-  }
-
   setInformation = () => {
     const { information } = this.state;
     const { _id } = information;

@@ -9,18 +9,6 @@ export class ContactProvider extends Component {
     responseMsg: ""
   };
 
-  setEmail = e => {
-    const email = e.target.value;
-    const currentContact = this.state.contact;
-    this.setState({ contact: { ...currentContact, email } });
-  };
-
-  setPhone = e => {
-    const phone = e.target.value;
-    const currentContact = this.state.contact;
-    this.setState({ contact: { ...currentContact, phone } });
-  };
-
   setContact = () => {
     const { contact } = this.state;
     const { _id } = contact;
