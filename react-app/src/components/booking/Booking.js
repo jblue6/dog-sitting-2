@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Container, Button } from "react-bootstrap";
 
-import { AuthContext } from "../../context/AuthContext";
+import { GlobalContext } from "../../context/GlobalState";
 
 import BookingList from "./BookingList";
 import BookingForm from "./BookingForm";
 
 class Booking extends Component {
-  static contextType = AuthContext;
+  static contextType = GlobalContext;
 
   state = { viewCurrentBookings: true }
 

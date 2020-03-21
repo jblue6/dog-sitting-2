@@ -227,7 +227,6 @@ export const GlobalProvider = ({ children }) => {
         if (response.status !== 200) {
           return;
         }
-        console.log(response.data);
         dispatch({
           type: "SET_CONTACT",
           payload: response.data

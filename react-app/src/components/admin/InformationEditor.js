@@ -3,10 +3,10 @@ import { Form, Button } from "react-bootstrap";
 
 import UpdateMessage from "./UpdateMessage"
 
-import { InformationContext } from "../../context/InformationContext";
+import { GlobalContext } from "../../context/GlobalState";
 
 class InformationEditor extends Component {
-  static contextType = InformationContext;
+  static contextType = GlobalContext;
 
   handleSubmit = e => {
     e.preventDefault();

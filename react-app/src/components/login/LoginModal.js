@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Modal, Button, Form, Container } from "react-bootstrap";
 
-import { AuthContext } from "../../context/AuthContext";
+import { GlobalContext } from "../../context/GlobalState";
 
 class LoginModal extends Component {
-  static contextType = AuthContext;
+  static contextType = GlobalContext;
 
   state = {
     isVisible: true,

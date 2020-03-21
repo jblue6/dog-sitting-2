@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import NavBar from "./components/generic/NavBar";
 import Home from "./components/home/Home";
@@ -11,72 +11,44 @@ import Login from "./components/login/Login";
 import Register from "./components/register/Register";
 import Account from "./components/account/Account";
 
-import { InformationProvider } from "./context/InformationContext";
-import { PricesProvider } from "./context/PricesContext";
-import { AuthProvider } from "./context/AuthContext";
 import { GlobalProvider } from "./context/GlobalState";
 
 function App() {
   return (
     <div className="App">
-      <AuthProvider>
-        <NavBar />
-      </AuthProvider>
       <GlobalProvider>
-        <div>Hello</div>
-      </GlobalProvider>
-      <Router>
-        <Switch>
+        <NavBar />
+        <Router>
           <Route exact path="/">
-            <InformationProvider>
-              <Home />
-            </InformationProvider>
+            <Home />
           </Route>
 
           <Route exact path="/prices">
-            <PricesProvider>
-              <Prices />
-            </PricesProvider>
-          </Route>
-
-          <Route exact path="/booking">
-            <AuthProvider>
-              <Booking />
-            </AuthProvider>
+            <Prices />
           </Route>
 
           <Route exact path="/login">
-            <AuthProvider>
-              <Login />
-            </AuthProvider>
+            <Login />
           </Route>
 
           <Route exact path="/register">
-            <AuthProvider>
-              <Register />
-            </AuthProvider>
+            <Register />
           </Route>
 
           <Route exact path="/booking">
-            <AuthProvider>
-              <Booking />
-            </AuthProvider>
+            <Booking />
           </Route>
 
           <Route exact path="/account">
-            <AuthProvider>
-              <Account />
-            </AuthProvider>
+            <Account />
           </Route>
 
           <Route exact path="/admin">
-            <AuthProvider>
-              <Admin />
-            </AuthProvider>
+            <Admin />
           </Route>
-        </Switch>
-      </Router>
-    </div>
+        </Router >
+      </GlobalProvider>
+    </div >
   );
 }
 

@@ -1,14 +1,12 @@
 import React, { useContext } from "react";
 import { Container, Table } from "react-bootstrap";
 
-import { PricesContext } from "../../context/PricesContext";
-
-import { ContactProvider } from "../../context/ContactContext";
+import { GlobalContext } from "../../context/GlobalState";
 
 import Footer from "../generic/Footer";
 
 function Prices() {
-  const { prices } = useContext(PricesContext);
+  const { prices } = useContext(GlobalContext);
 
   return (
     <div>
@@ -34,9 +32,7 @@ function Prices() {
           </tbody>
         </Table>
       </Container>
-      <ContactProvider>
-        <Footer />
-      </ContactProvider>
+      <Footer />
     </div>
   );
 }

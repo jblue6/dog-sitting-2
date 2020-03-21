@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 
-import { AuthContext } from "../../context/AuthContext";
+import { GlobalContext } from "../../context/GlobalState";
 
 class NavBar extends Component {
-  static contextType = AuthContext;
+  static contextType = GlobalContext;
 
   state = {
     onHomePage: true

@@ -1,18 +1,14 @@
 import React, { Component } from "react";
 import { Container } from "react-bootstrap";
 
-import { AuthContext } from "../../context/AuthContext";
-
-import { InformationProvider } from "../../context/InformationContext";
-import { PricesProvider } from "../../context/PricesContext";
-import { ContactProvider } from "../../context/ContactContext";
+import { GlobalContext } from "../../context/GlobalState";
 
 import InformationEditor from "./InformationEditor";
 import PriceEditor from "./PriceEditor";
 import ContactEditor from "./ContactEditor";
 
 class Admin extends Component {
-  static contextType = AuthContext;
+  static contextType = GlobalContext;
 
   logout = e => {
     e.preventDefault();
@@ -25,17 +21,9 @@ class Admin extends Component {
     const content = isAuthenticated ? (
       <div>
         <div>{errorMsg}</div>
-        <InformationProvider>
-          <InformationEditor />
-        </InformationProvider>
-
-        <PricesProvider>
-          <PriceEditor />
-        </PricesProvider>
-
-        <ContactProvider>
-          <ContactEditor />
-        </ContactProvider>
+        <InformationEditor />
+        <PriceEditor />
+        <ContactEditor />
       </div>
     ) : (
         //<Redirect to="/" />

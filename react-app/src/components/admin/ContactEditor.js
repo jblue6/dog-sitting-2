@@ -3,10 +3,10 @@ import { Form, Button } from "react-bootstrap";
 
 import UpdateMessage from "./UpdateMessage"
 
-import { ContactContext } from "../../context/ContactContext";
+import { GlobalContext } from "../../context/GlobalState";
 
 class ContactEditor extends Component {
-  static contextType = ContactContext;
+  static contextType = GlobalContext;
 
   handleSubmit = e => {
     e.preventDefault();

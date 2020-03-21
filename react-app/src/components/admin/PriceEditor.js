@@ -3,10 +3,10 @@ import { Form, Table, Button } from "react-bootstrap";
 
 import UpdateMessage from "./UpdateMessage";
 
-import { PricesContext } from "../../context/PricesContext";
+import { GlobalContext } from "../../context/GlobalState";
 
 class PriceEditor extends Component {
-  static contextType = PricesContext;
+  static contextType = GlobalContext;
 
   handleSubmit = e => {
     e.preventDefault();

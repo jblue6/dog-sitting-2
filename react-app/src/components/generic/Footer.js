@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { Navbar, Container } from "react-bootstrap";
-import { ContactContext } from "../../context/ContactContext";
+import { GlobalContext } from "../../context/GlobalState";
 
 function Footer() {
-  const { contact } = useContext(ContactContext);
+  const { contact } = useContext(GlobalContext);
 
   const style = {
     position: "fixed",

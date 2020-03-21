@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { Container } from "react-bootstrap";
 import { Redirect } from "react-router";
 
-import { AuthContext } from "../../context/AuthContext";
+import { GlobalContext } from "../../context/GlobalState";
 
 import LoginModal from "./LoginModal";
 
 class Login extends Component {
-  static contextType = AuthContext;
+  static contextType = GlobalContext;
 
   render() {
     const { isAuthenticated } = this.context.auth;

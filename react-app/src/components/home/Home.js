@@ -1,15 +1,13 @@
 import React, { useContext } from "react";
 import { Container } from "react-bootstrap";
 
-import { InformationContext } from "../../context/InformationContext";
-
-import { ContactProvider } from "../../context/ContactContext";
+import { GlobalContext } from "../../context/GlobalState";
 
 import Footer from "../generic/Footer";
 import "./Home.css"
 
 function Home() {
-  const { title, about } = useContext(InformationContext).information;
+  const { title, about } = useContext(GlobalContext).information;
   const aboutArr = (about) ? about.split("\n") : [];
 
   return (
@@ -32,9 +30,7 @@ function Home() {
           </div>
         </section>
       </Container>
-      <ContactProvider>
-        <Footer />
-      </ContactProvider>
+      <Footer />
     </div>
   );
 }
