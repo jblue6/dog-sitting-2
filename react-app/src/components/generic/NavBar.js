@@ -24,6 +24,7 @@ class NavBar extends Component {
 
   render() {
     const { isAuthenticated } = this.context.auth;
+    const { is_admin } = this.context.auth.user;
 
     return (
       <Navbar bg="light" variant="light">
@@ -36,7 +37,7 @@ class NavBar extends Component {
               isAuthenticated ?
                 <>
                   <Nav.Link href="/booking">Booking</Nav.Link>
-                  <Nav.Link href="/admin">Admin</Nav.Link>
+                  {is_admin ? <Nav.Link href="/admin">Admin</Nav.Link> : ""}
                   <Nav.Link href="/account">Account</Nav.Link>
                   <Nav.Link onClick={this.buttonClicked}>Logout</Nav.Link>
                 </> : <>

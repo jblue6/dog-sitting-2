@@ -9,7 +9,9 @@ export default class RegisterModal extends Component {
   state = {
     isVisible: true,
     email: "",
-    password: ""
+    password1: "",
+    password2: "",
+    errorMsg: ""
   };
 
   showDialog = () => {
@@ -25,44 +27,63 @@ export default class RegisterModal extends Component {
     this.setState({ email });
   };
 
-  setPassword = e => {
-    const password = e.target.value;
-    this.setState({ password });
+  setPassword1 = e => {
+    const password1 = e.target.value;
+    this.setState({ password1 });
   };
 
-  attemptLogin = e => {
+  setPassword2 = e => {
+    const password2 = e.target.value;
+    this.setState({ password2 });
+  };
+
+  attemptRegister = e => {
     e.preventDefault();
-    const { email, password } = this.state;
-    const credentials = { email, password };
-    this.context.login(credentials);
+    const { email, password1, password2 } = this.state;
+    if (password1 !== password2) return this.setState({ errorMsg: "Passwords do not match" });
+    this.setState({ errorMsg: "" });
+    const credentials = { email, password: password1 };
+    this.context.register(credentials);
   };
 
   render() {
-    const { errorMsg } = this.context.auth;
+    const errorMsg = this.context.auth.errorMsg || this.state.errorMsg;
 
     let contents = this.state.isVisible ? (
       <Modal.Dialog>
         <Modal.Header>
-          <Modal.Title>Please Login</Modal.Title>
+          <Modal.Title>Register Account</Modal.Title>
         </Modal.Header>
 
         <Container>
-          <Form className="mb-5 mt-2" onSubmit={this.attemptLogin}>
+          <Form className="mb-5 mt-2" onSubmit={this.attemptRegister}>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Email"
                 onChange={this.setEmail}
+                value={this.state.email}
               />
             </Form.Group>
 
-            <Form.Group controlId="formBasicPassword">
+            <Form.Group controlId="formBasicPassword1">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Password"
-                onChange={this.setPassword}
+                onChange={this.setPassword1}
+                value={this.state.password1}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword2">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Confirm Password"
+                onChange={this.setPassword2}
+                value={this.state.password2}
               />
             </Form.Group>
 
@@ -73,7 +94,7 @@ export default class RegisterModal extends Component {
               type="submit"
               className="float-right ml-2"
             >
-              Login
+              Register
             </Button>
             <Button
               variant="secondary"
@@ -87,9 +108,9 @@ export default class RegisterModal extends Component {
       </Modal.Dialog>
     ) : (
         <Button variant="primary" onClick={this.showDialog} className="mt-3">
-          Login
+          Register
       </Button>
       );
-    return <div>{contents}</div>;
+    return <Container>{contents}</Container>;
   }
 }

@@ -10,6 +10,15 @@ export default (state, action) => {
           errorMsg: ""
         }
       }
+    case 'REGISTER_SUCCESS':
+      return {
+        ...state,
+        auth: {
+          isAuthenticated: true,
+          user: payload,
+          errorMsg: ""
+        }
+      }
     case 'LOGOUT':
       return {
         ...state,
@@ -43,6 +52,16 @@ export default (state, action) => {
       return {
         ...state,
         prices: state.prices.filter((price, index) => index !== payload)
+      }
+    case "SET_BOOKINGS":
+      return {
+        ...state,
+        bookings: payload
+      }
+    case "SET_ALL_BOOKINGS":
+      return {
+        ...state,
+        allBookings: payload
       }
     default:
       return state;

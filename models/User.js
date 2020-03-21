@@ -13,9 +13,13 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  is_admin: {
+    type: Boolean,
+    default: false
+  },
   register_date: {
     type: Date,
-    deault: Date.now
+    default: Date.now
   }
 });
 

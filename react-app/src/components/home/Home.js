@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 import { GlobalContext } from "../../context/GlobalState";
 
@@ -8,6 +9,8 @@ import "./Home.css"
 
 function Home() {
   const { title, about } = useContext(GlobalContext).information;
+  const { isAuthenticated } = useContext(GlobalContext).auth;
+  const bookingLink = isAuthenticated ? "/booking" : "/login";
   const aboutArr = (about) ? about.split("\n") : [];
 
   return (
@@ -22,11 +25,11 @@ function Home() {
           </header>
           <div className="top-box top-box-a">
             <h4>Prices</h4>
-            <a href="/prices" className="btn">View Here</a>
+            <Link to="/prices" className="btn">View Here</Link>
           </div>
           <div className="top-box top-box-b">
             <h4>Booking</h4>
-            <a href="/booking" className="btn">Request Now</a>
+            <Link to={bookingLink} className="btn">Request Now</Link>
           </div>
         </section>
       </Container>

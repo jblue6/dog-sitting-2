@@ -19,33 +19,19 @@ function App() {
       <GlobalProvider>
         <NavBar />
         <Router>
-          <Route exact path="/">
-            <Home />
-          </Route>
+          <Route exact path="/" component={Home} />
 
-          <Route exact path="/prices">
-            <Prices />
-          </Route>
+          <Route exact path="/prices" component={Prices} />
 
-          <Route exact path="/login">
-            <Login />
-          </Route>
+          <Route exact path="/login" component={Login} />
 
-          <Route exact path="/register">
-            <Register />
-          </Route>
+          <Route exact path="/register" component={Register} />
 
-          <Route exact path="/booking">
-            <Booking />
-          </Route>
+          <Route exact path="/booking" component={Booking} />
 
-          <Route exact path="/account">
-            <Account />
-          </Route>
+          <Route exact path="/account" component={Account} />
 
-          <Route exact path="/admin">
-            <Admin />
-          </Route>
+          <Route exact path="/admin" component={Admin} />
         </Router >
       </GlobalProvider>
     </div >

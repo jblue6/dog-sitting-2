@@ -31,12 +31,11 @@ router.post("/", async (req, res) => {
     const hash = await bcrypt.hash(newUser.password, salt);
     newUser.password = hash;
 
-    const user = await newUser.save();
+    const savedUser = await newUser.save();
 
-    // json web token signature
+    // // json web token signature
     jwt.sign(
-      //the payload
-      { id: user.id },
+      { id: savedUser._id, is_admin: savedUser.is_admin },
       process.env.JWT_SECRET,
       { expiresIn: 3600 },
       (err, token) => {
@@ -44,8 +43,9 @@ router.post("/", async (req, res) => {
         res.json({
           token,
           user: {
-            id: user.id,
-            email: user.email
+            id: savedUser._id,
+            email: savedUser.email,
+            is_admin: savedUser.is_admin
           }
         });
       }

@@ -9,12 +9,7 @@ import BookingForm from "./BookingForm";
 class Booking extends Component {
   static contextType = GlobalContext;
 
-  state = { viewCurrentBookings: true }
-
-  logout = e => {
-    e.preventDefault();
-    this.context.logout();
-  };
+  state = { viewCurrentBookings: false }
 
   toggleView = viewCurrentBookings => {
     this.setState({ viewCurrentBookings })
@@ -24,13 +19,13 @@ class Booking extends Component {
     const { viewCurrentBookings } = this.state;
     const bookingContent = viewCurrentBookings ? (
       <>
-        <Button onClick={() => this.toggleView(false)}>
+        <Button onClick={() => this.toggleView(false)} className="float-right">
           Make a New Booking
         </Button>
         <BookingList />
       </>) : (
         <>
-          <Button onClick={() => this.toggleView(true)}>
+          <Button onClick={() => this.toggleView(true)} className="float-right">
             View Current Bookings
         </Button>
           <BookingForm />

@@ -17,8 +17,9 @@ class Admin extends Component {
 
   render() {
     const { isAuthenticated, errorMsg } = this.context.auth;
+    const { is_admin } = this.context.auth.user;
 
-    const content = isAuthenticated ? (
+    const content = (isAuthenticated && is_admin) ? (
       <div>
         <div>{errorMsg}</div>
         <InformationEditor />
@@ -27,7 +28,7 @@ class Admin extends Component {
       </div>
     ) : (
         //<Redirect to="/" />
-        <div>Logged Out</div>
+        <div>Insufficient Rights</div>
       );
 
     return <Container className="mt-2">{content}</Container>;

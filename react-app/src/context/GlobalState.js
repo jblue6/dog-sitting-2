@@ -11,146 +11,205 @@ const initialState = {
   information: {},
   prices: [],
   contact: {},
+  account: {},
+  bookings: [],
+  allBookings: [],
   responseMsg: ""
 }
+
+const requestConfig = {
+  headers: {
+    "Content-Type": "application/json"
+  }
+};
 
 export const GlobalContext = createContext(initialState);
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
-  function login(credentials) {
+  async function login(credentials) {
     const body = JSON.stringify(credentials);
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    };
-
-    axios
-      .post("/api/auth", body, config)
+    try {
+      const response = await axios.post("/api/auth", body, requestConfig);
       // on success
-      .then(res => {
-        const { token, user } = res.data;
+      const { token, user } = response.data;
 
-        // set token to local storage
-        localStorage.setItem("token", token);
+      // set token to local storage
+      localStorage.setItem("token", token);
 
-        dispatch({
-          type: "LOGIN",
-          payload: user
-        });
-      })
-      // on failure
-      .catch(err => {
-        const errorMsg = err.response.data.msg;
-        logout(errorMsg);
+      dispatch({
+        type: "LOGIN",
+        payload: user
       });
+    } catch (err) {
+      const errorMsg = err.response.data.msg;
+      logout(errorMsg);
+    };
   };
 
+  async function register(credentials) {
+    const body = JSON.stringify(credentials);
+    try {
+      const response = await axios.post("/api/users", body, requestConfig);
+      // on success
+      const { token, user } = response.data;
+
+      // set token to local storage
+      localStorage.setItem("token", token);
+
+      dispatch({
+        type: "REGISTER",
+        payload: user
+      });
+    } catch (err) {
+      const errorMsg = err.response.data.msg;
+      logout(errorMsg);
+    };
+  };
+
+  async function getUser() {
+    const tokenConfig = getTokenConfig();
+    if (!tokenConfig) {
+      if (state.auth.isAuthenticated) logout();
+      return;
+    }
+    if (state.auth.user.isAuthenticated) {
+      return;
+    }
+
+    try {
+      const response = await axios.get("/api/auth/user", tokenConfig);
+      const { user } = response.data;
+      dispatch({
+        type: "LOGIN",
+        payload: user
+      });
+    } catch (err) {
+      // will be triggered if the token is no longer valid
+      logout("Session Expired. Please Log in again");
+    }
+  }
+
   function logout(errorMsg = "") {
+    localStorage.removeItem("token");
     dispatch({
       type: "LOGOUT",
       payload: errorMsg
     });
-    localStorage.removeItem("token");
   };
 
-  function setInformation() {
-    const { information } = state;
-    const { _id } = information;
+  async function setInformation() {
+    const tokenConfig = getTokenConfig();
+    if (!tokenConfig) return;
 
-    const token = localStorage.getItem("token");
-    if (!token) return;
+    try {
+      const { information } = state;
+      const { _id, title, about } = information;
+      const response = await axios.put(`/api/information/${information._id}`, information, tokenConfig);
 
-    const tokenConfig = {
-      headers: {
-        "Content-Type": "application/json",
-        "x-auth-token": token
+      if (response.status !== 200) {
+        return;
       }
-    };
 
-    axios
-      .put(`/api/information/${_id}`, information, tokenConfig)
-      .then(response => {
-        if (response.status !== 200) {
-          return;
-        }
-
-        const { title, about } = information;
-        const newInformation = { _id, title, about }
-        dispatch({
-          type: "SET_INFORMATION",
-          payload: newInformation
-        });
-      })
-      .catch(function (err) {
-        console.log("", err);
+      dispatch({
+        type: "SET_INFORMATION",
+        payload: { _id, title, about }
       });
+    } catch (err) {
+      console.log("", err);
+    };
   }
 
-  function setContact() {
-    const { contact } = state;
-    const { _id } = contact;
-
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const tokenConfig = {
-      headers: {
-        "Content-Type": "application/json",
-        "x-auth-token": token
+  async function getInformation() {
+    if (state.information.title) return;
+    try {
+      const response = await axios.get("/api/information");
+      if (response.status !== 200) {
+        return;
       }
-    };
-
-    axios
-      .put(`/api/contact/${_id}`, contact, tokenConfig)
-      .then(response => {
-        if (response.status !== 200) {
-          return;
-        }
-
-        const { email, phone } = contact;
-        const newContact = { _id, email, phone }
-        dispatch({
-          type: "SET_CONTACT",
-          payload: newContact
-        });
-      })
-      .catch(function (err) {
-        console.log("", err);
+      dispatch({
+        type: "SET_INFORMATION",
+        payload: response.data
       });
+    } catch (err) {
+      console.log("", err);
+    }
   }
 
-  function setPrices() {
-    const prices = state.prices;
+  async function setContact() {
+    const tokenConfig = getTokenConfig();
+    if (!tokenConfig) return;
 
-    const token = localStorage.getItem("token");
-    if (!token) return;
+    try {
+      const { contact } = state;
+      const { _id, email, phone } = contact;
+      const response = await axios.put(`/api/contact/${_id}`, contact, tokenConfig);
 
-    const tokenConfig = {
-      headers: {
-        "Content-Type": "application/json",
-        "x-auth-token": token
+      if (response.status !== 200) {
+        return;
       }
-    };
 
-    axios
-      .post(`/api/prices/`, { prices }, tokenConfig)
-      .then(response => {
-        if (response.status !== 200) {
-          return;
-        }
-
-        dispatch({
-          type: "SET_PRICES",
-          payload: prices
-        });
-      })
-      .catch(function (err) {
-        console.log("", err);
+      dispatch({
+        type: "SET_CONTACT",
+        payload: { _id, email, phone }
       });
+    } catch (err) {
+      console.log("", err);
+    };
+  }
+
+  async function getContact() {
+    if (state.contact.email) return;
+    try {
+      const response = await axios.get("/api/contact");
+      if (response.status !== 200) {
+        return;
+      }
+      dispatch({
+        type: "SET_CONTACT",
+        payload: response.data
+      });
+    } catch (err) {
+      console.log("", err);
+    }
+  }
+
+  async function setPrices() {
+    const tokenConfig = getTokenConfig();
+    if (!tokenConfig) return;
+
+    try {
+      const { prices } = state;
+      const response = await axios.post(`/api/prices/`, { prices }, tokenConfig);
+
+      if (response.status !== 200) {
+        return;
+      }
+
+      dispatch({
+        type: "SET_PRICES",
+        payload: prices
+      });
+    } catch (err) {
+      console.log("", err);
+    };
+  }
+
+  async function getPrices() {
+    if (state.prices.length) return;
+    try {
+      const response = await axios.get("/api/prices");
+      if (response.status !== 200) {
+        return;
+      }
+      dispatch({
+        type: "SET_PRICES",
+        payload: response.data
+      });
+    } catch (err) {
+      console.log("", err);
+    }
   }
 
   function deleteRow(e) {
@@ -178,79 +237,88 @@ export const GlobalProvider = ({ children }) => {
     });
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
+  async function requestBooking(booking) {
+    const tokenConfig = getTokenConfig();
+    if (!tokenConfig) return;
 
-    const tokenConfig = {
+    try {
+      const response = await axios.post(`/api/booking/`, booking, tokenConfig);
+      if (response.status !== 200) {
+        return;
+      }
+      dispatch({
+        type: "UPDATE_BOOKINGS",
+        payload: null
+      });
+    } catch (err) {
+      console.log("", err);
+    }
+  }
+
+  async function approveBooking(id) {
+    const tokenConfig = getTokenConfig();
+    if (!tokenConfig) return;
+    if (!state.auth.user.is_admin) return;
+    try {
+      const response = await axios.put(`/api/booking/approve/${id}`, null, tokenConfig);
+      dispatch({
+        type: "SET_ALL_BOOKINGS",
+        payload: response.data
+      });
+    } catch (err) {
+      console.log("", err);
+    }
+  }
+
+  async function getBookings() {
+    const tokenConfig = getTokenConfig();
+    if (!tokenConfig) return;
+    if (state.bookings.length) return;
+    try {
+      const response = await axios.get("/api/booking", tokenConfig);
+      dispatch({
+        type: "SET_BOOKINGS",
+        payload: response.data
+      });
+    } catch (err) {
+      console.log("", err);
+    }
+  }
+
+  async function getAllBookings() {
+    const tokenConfig = getTokenConfig();
+    if (!tokenConfig) return;
+    if (state.allBookings.length || !state.auth.user.is_admin) return;
+    try {
+      const response = await axios.get("/api/booking/all", tokenConfig);
+      dispatch({
+        type: "SET_ALL_BOOKINGS",
+        payload: response.data
+      });
+    } catch (err) {
+      console.log("", err);
+    }
+  }
+
+  function getTokenConfig() {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+
+    return {
       headers: {
         "Content-Type": "application/json",
         "x-auth-token": token
       }
     };
+  }
 
-    // check if user is authenticated
-    axios
-      .get("/api/auth/user", tokenConfig)
-      .then(res => {
-        // if the token is valid
-        const { user } = res.data;
-        dispatch({
-          type: "LOGIN",
-          payload: user
-        });
-      })
-      .catch(err => {
-        // will be triggered if the token is no longer valid
-        logout("Session Expired. Please Log in again");
-      });
-
-    axios
-      .get("/api/information")
-      .then(response => {
-        if (response.status !== 200) {
-          return;
-        }
-
-        dispatch({
-          type: "SET_INFORMATION",
-          payload: response.data
-        });
-      })
-      .catch(function (err) {
-        console.log("", err);
-      });
-
-    axios
-      .get("/api/contact")
-      .then(response => {
-        if (response.status !== 200) {
-          return;
-        }
-        dispatch({
-          type: "SET_CONTACT",
-          payload: response.data
-        });
-      })
-      .catch(function (err) {
-        console.log("", err);
-      });
-
-    axios
-      .get("/api/prices")
-      .then(response => {
-        if (response.status !== 200) {
-          return;
-        }
-
-        dispatch({
-          type: "SET_PRICES",
-          payload: response.data
-        });
-      })
-      .catch(function (err) {
-        console.log("", err);
-      });
+  useEffect(() => {
+    getUser();
+    getInformation();
+    getContact();
+    getPrices();
+    getBookings();
+    getAllBookings();
   });
 
   return (
@@ -259,14 +327,18 @@ export const GlobalProvider = ({ children }) => {
       information: state.information,
       contact: state.contact,
       prices: state.prices,
+      bookings: state.bookings,
       login,
+      register,
       logout,
       setInformation,
       setContact,
       setPrices,
       addRow,
       deleteRow,
-      updateRow
+      updateRow,
+      requestBooking,
+      approveBooking
     }}>
       {children}
     </GlobalContext.Provider>

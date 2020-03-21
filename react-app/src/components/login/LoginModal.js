@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Modal, Button, Form, Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 import { GlobalContext } from "../../context/GlobalState";
 
@@ -81,6 +82,12 @@ class LoginModal extends Component {
               className="float-right mb-3"
             >
               Cancel
+            </Button>
+            <Button
+              variant="secondary"
+              className="float-right mb-3 mr-2"
+            >
+              <Link to="/register" style={{ color: "white", textDecoration: "none" }}>Register</Link>
             </Button>
           </Form>
         </Container>
