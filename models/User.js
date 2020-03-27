@@ -13,9 +13,21 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  is_admin: {
+  isAdmin: {
     type: Boolean,
     default: false
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  phone: {
+    type: String,
+    required: true
+  },
+  address: {
+    type: String,
+    required: true
   },
   register_date: {
     type: Date,

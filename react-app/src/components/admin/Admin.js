@@ -3,31 +3,23 @@ import { Container } from "react-bootstrap";
 
 import { GlobalContext } from "../../context/GlobalState";
 
-import InformationEditor from "./InformationEditor";
-import PriceEditor from "./PriceEditor";
-import ContactEditor from "./ContactEditor";
+import ContentEditor from "./ContentEditor";
+import BookingApproval from "./BookingApproval";
 
 class Admin extends Component {
   static contextType = GlobalContext;
 
-  logout = e => {
-    e.preventDefault();
-    this.context.logout();
-  };
-
   render() {
     const { isAuthenticated, errorMsg } = this.context.auth;
-    const { is_admin } = this.context.auth.user;
+    const { isAdmin } = this.context.auth.user;
 
-    const content = (isAuthenticated && is_admin) ? (
+    const content = (isAuthenticated && isAdmin) ? (
       <div>
         <div>{errorMsg}</div>
-        <InformationEditor />
-        <PriceEditor />
-        <ContactEditor />
+        <ContentEditor />
+        <BookingApproval />
       </div>
     ) : (
-        //<Redirect to="/" />
         <div>Insufficient Rights</div>
       );
 

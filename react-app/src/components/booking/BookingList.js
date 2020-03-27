@@ -24,10 +24,10 @@ const BookingList = () => {
         <tr key={booking._id}>
           <td>{booking.service}</td>
           <td><Moment format="DD-MM-YYYY">{booking.startDate}</Moment></td>
-          <td><Moment format="DD-MM-YYYY">{booking.end}</Moment></td>
+          <td><Moment format="DD-MM-YYYY">{booking.endDate}</Moment></td>
           <td>{booking.numberOfDogs.toString()}</td>
           <td>{booking.notes}</td>
-          <td className={booking.status === "Pending" ? "text-danger" : "text-primary"}>{booking.status}</td>
+          <td className={booking.status === "Approved" ? "text-success" : "text-danger"}>{booking.status}</td>
         </tr>
       ))}
     </tbody>

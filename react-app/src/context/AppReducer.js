@@ -43,16 +43,6 @@ export default (state, action) => {
         ...state,
         prices: payload
       }
-    case 'ADD_PRICE_ROW':
-      return {
-        ...state,
-        prices: [...state.prices, { description: "", rate: 0, basis: "" }]
-      }
-    case 'DELETE_PRICE_ROW':
-      return {
-        ...state,
-        prices: state.prices.filter((price, index) => index !== payload)
-      }
     case "SET_BOOKINGS":
       return {
         ...state,
@@ -62,6 +52,11 @@ export default (state, action) => {
       return {
         ...state,
         allBookings: payload
+      }
+    case "SET_ACCOUNT":
+      return {
+        ...state,
+        account: payload
       }
     default:
       return state;

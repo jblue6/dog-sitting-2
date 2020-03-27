@@ -86,7 +86,7 @@ const BookingForm = () => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Start Date</Form.Label>
+          <Form.Label>End Date</Form.Label>
           <Form.Control
             type="date"
             value={endDate}
@@ -95,7 +95,7 @@ const BookingForm = () => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>End Date</Form.Label>
+          <Form.Label>Number of Dogs</Form.Label>
           <Form.Control
             as="select"
             value={numberOfDogs}

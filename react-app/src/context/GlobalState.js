@@ -15,7 +15,7 @@ const initialState = {
   bookings: [],
   allBookings: [],
   responseMsg: ""
-}
+};
 
 const requestConfig = {
   headers: {
@@ -45,8 +45,8 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       const errorMsg = err.response.data.msg;
       logout(errorMsg);
-    };
-  };
+    }
+  }
 
   async function register(credentials) {
     const body = JSON.stringify(credentials);
@@ -65,8 +65,8 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       const errorMsg = err.response.data.msg;
       logout(errorMsg);
-    };
-  };
+    }
+  }
 
   async function getUser() {
     const tokenConfig = getTokenConfig();
@@ -97,16 +97,19 @@ export const GlobalProvider = ({ children }) => {
       type: "LOGOUT",
       payload: errorMsg
     });
-  };
+  }
 
-  async function setInformation() {
+  async function setInformation(information) {
     const tokenConfig = getTokenConfig();
     if (!tokenConfig) return;
 
     try {
-      const { information } = state;
       const { _id, title, about } = information;
-      const response = await axios.put(`/api/information/${information._id}`, information, tokenConfig);
+      const response = await axios.put(
+        `/api/information/${information._id}`,
+        information,
+        tokenConfig
+      );
 
       if (response.status !== 200) {
         return;
@@ -118,7 +121,7 @@ export const GlobalProvider = ({ children }) => {
       });
     } catch (err) {
       console.log("", err);
-    };
+    }
   }
 
   async function getInformation() {
@@ -137,14 +140,17 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
-  async function setContact() {
+  async function setContact(contact) {
     const tokenConfig = getTokenConfig();
     if (!tokenConfig) return;
 
     try {
-      const { contact } = state;
       const { _id, email, phone } = contact;
-      const response = await axios.put(`/api/contact/${_id}`, contact, tokenConfig);
+      const response = await axios.put(
+        `/api/contact/${_id}`,
+        contact,
+        tokenConfig
+      );
 
       if (response.status !== 200) {
         return;
@@ -156,7 +162,7 @@ export const GlobalProvider = ({ children }) => {
       });
     } catch (err) {
       console.log("", err);
-    };
+    }
   }
 
   async function getContact() {
@@ -175,13 +181,16 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
-  async function setPrices() {
+  async function setPrices(prices) {
     const tokenConfig = getTokenConfig();
     if (!tokenConfig) return;
 
     try {
-      const { prices } = state;
-      const response = await axios.post(`/api/prices/`, { prices }, tokenConfig);
+      const response = await axios.post(
+        `/api/prices/`,
+        { prices },
+        tokenConfig
+      );
 
       if (response.status !== 200) {
         return;
@@ -193,7 +202,7 @@ export const GlobalProvider = ({ children }) => {
       });
     } catch (err) {
       console.log("", err);
-    };
+    }
   }
 
   async function getPrices() {
@@ -211,31 +220,6 @@ export const GlobalProvider = ({ children }) => {
       console.log("", err);
     }
   }
-
-  function deleteRow(e) {
-    const rowID = parseInt(e.target.parentElement.parentElement.id);
-    dispatch({ type: 'DELETE_PRICE_ROW', payload: rowID });
-  };
-
-  function addRow() {
-    dispatch({ type: 'ADD_PRICE_ROW', payload: null });
-  };
-
-  function updateRow(e) {
-    const rowID = parseInt(e.target.parentElement.parentElement.id);
-    let { value, name } = e.target;
-    if (name === "rate") value = parseFloat(value);
-
-    const { prices } = state;
-    prices.forEach((price, index) => {
-      if (index === rowID) price[name] = value;
-    });
-
-    dispatch({
-      type: "SET_PRICES",
-      payload: prices
-    });
-  };
 
   async function requestBooking(booking) {
     const tokenConfig = getTokenConfig();
@@ -255,12 +239,16 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
-  async function approveBooking(id) {
+  async function approveRejectBooking(id, action) {
     const tokenConfig = getTokenConfig();
     if (!tokenConfig) return;
-    if (!state.auth.user.is_admin) return;
+    if (!state.auth.user.isAdmin) return;
     try {
-      const response = await axios.put(`/api/booking/approve/${id}`, null, tokenConfig);
+      const response = await axios.put(
+        `/api/booking/approve/${id}`,
+        { action },
+        tokenConfig
+      );
       dispatch({
         type: "SET_ALL_BOOKINGS",
         payload: response.data
@@ -288,11 +276,26 @@ export const GlobalProvider = ({ children }) => {
   async function getAllBookings() {
     const tokenConfig = getTokenConfig();
     if (!tokenConfig) return;
-    if (state.allBookings.length || !state.auth.user.is_admin) return;
+    if (state.allBookings.length || !state.auth.user.isAdmin) return;
     try {
       const response = await axios.get("/api/booking/all", tokenConfig);
       dispatch({
         type: "SET_ALL_BOOKINGS",
+        payload: response.data
+      });
+    } catch (err) {
+      console.log("", err);
+    }
+  }
+
+  async function getAccount() {
+    const tokenConfig = getTokenConfig();
+    if (!tokenConfig) return;
+    if (state.account.email) return;
+    try {
+      const response = await axios.get("/api/account", tokenConfig);
+      dispatch({
+        type: "SET_ACCOUNT",
         payload: response.data
       });
     } catch (err) {
@@ -319,28 +322,30 @@ export const GlobalProvider = ({ children }) => {
     getPrices();
     getBookings();
     getAllBookings();
+    getAccount();
   });
 
   return (
-    <GlobalContext.Provider value={{
-      auth: state.auth,
-      information: state.information,
-      contact: state.contact,
-      prices: state.prices,
-      bookings: state.bookings,
-      login,
-      register,
-      logout,
-      setInformation,
-      setContact,
-      setPrices,
-      addRow,
-      deleteRow,
-      updateRow,
-      requestBooking,
-      approveBooking
-    }}>
+    <GlobalContext.Provider
+      value={{
+        auth: state.auth,
+        information: state.information,
+        contact: state.contact,
+        prices: state.prices,
+        bookings: state.bookings,
+        allBookings: state.allBookings,
+        account: state.account,
+        login,
+        register,
+        logout,
+        setInformation,
+        setContact,
+        setPrices,
+        requestBooking,
+        approveRejectBooking
+      }}
+    >
       {children}
     </GlobalContext.Provider>
   );
-}
+};

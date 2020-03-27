@@ -10,7 +10,7 @@ router.post("/", auth, async (req, res) => {
   const { user, body } = req;
   const { startDate, endDate, numberOfDogs, service, notes } = body;
   const booking = new Booking({
-    userId: mongoose.Types.ObjectId(user.id),
+    user: mongoose.Types.ObjectId(user.id),
     startDate: createDate(startDate),
     endDate: createDate(endDate),
     endDate: createDate(endDate),
@@ -30,11 +30,13 @@ router.post("/", auth, async (req, res) => {
 
 router.put("/approve/:id", auth, async (req, res) => {
   const { user } = req;
-  if (!user.is_admin) res.status(404);
+  const { action } = req.body;
+  const { id } = req.params;
 
-  const { id } = req.params
+  if (!user.isAdmin) res.status(404);
+
   try {
-    const response = await Booking.findAndUpdate(id, { status: "Approved" });
+    const response = await Booking.findByIdAndUpdate(id, { status: action });
     const bookings = await Booking.find();
     res.json(bookings);
   } catch (err) {
@@ -47,10 +49,7 @@ router.get("/", auth, async (req, res) => {
 
   try {
     const response = await Booking.find();
-    const bookings = response.filter(booking => {
-      console.log(booking.userId, user.id, booking.userId.equals(mongoose.Types.ObjectId(user.id)));
-      return booking.userId.equals(mongoose.Types.ObjectId(user.id));
-    });
+    const bookings = response.filter(booking => booking.user.equals(mongoose.Types.ObjectId(user.id)));
     res.json(bookings);
   } catch (err) {
     res.status(404);
@@ -60,10 +59,10 @@ router.get("/", auth, async (req, res) => {
 router.get("/all", auth, async (req, res) => {
   const { user } = req;
 
-  if (!user.is_admin) res.json([]);
+  if (!user.isAdmin) res.json([]);
 
   try {
-    const response = await Booking.find();
+    const response = await Booking.find().populate("user");
     res.json(response);
   } catch (err) {
     res.status(404);

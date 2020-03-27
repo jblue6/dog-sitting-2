@@ -12,6 +12,7 @@ const User = require("../models/User");
 // @access Public
 router.post("/", async (req, res) => {
   try {
+
     const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ msg: "Please enter all fields" });
@@ -35,7 +36,7 @@ router.post("/", async (req, res) => {
 
     // // json web token signature
     jwt.sign(
-      { id: savedUser._id, is_admin: savedUser.is_admin },
+      { id: savedUser._id, isAdmin: savedUser.isAdmin },
       process.env.JWT_SECRET,
       { expiresIn: 3600 },
       (err, token) => {
@@ -45,7 +46,7 @@ router.post("/", async (req, res) => {
           user: {
             id: savedUser._id,
             email: savedUser.email,
-            is_admin: savedUser.is_admin
+            isAdmin: savedUser.isAdmin
           }
         });
       }

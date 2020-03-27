@@ -8,6 +8,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 const db = process.env.MONGO_URI;
 
+const Booking = require("./models/Booking");
+
 //connect to Mongo
 mongoose
   .connect(db, {
@@ -27,6 +29,7 @@ app.use("/api/contact", require("./routes/contact"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/booking", require("./routes/booking"));
+app.use("/api/account", require("./routes/account"));
 
 // serve static assets if in production
 if (process.env.NODE_ENV === "production") {

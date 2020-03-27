@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
     if (!isMatch) return res.status(400).json({ msg: "Invalid password" });
 
     jwt.sign(
-      { id: user.id, is_admin: user.is_admin },
+      { id: user.id, isAdmin: user.isAdmin },
       process.env.JWT_SECRET,
       { expiresIn: 3600 },
       (err, token) => {
@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
           user: {
             id: user.id,
             email: user.email,
-            is_admin: user.is_admin
+            isAdmin: user.isAdmin
           }
         });
       }
